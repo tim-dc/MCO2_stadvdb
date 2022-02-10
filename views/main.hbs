@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Example</title>
+        <title></title>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src = "/js/index.js"></script>
+        <link rel="stylesheet" href="/css/index.css"/>
     </head>
+
     <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
+
+         <button type="button" id="">Success</button>
+        <input class="form-check-input" type="checkbox" id="node1-switch">
+        <input class="form-check-input" type="checkbox" id="node2-switch">
+        <input class="form-check-input" type="checkbox" id="node3-switch">
+
+        <select class="form-select" aria-label="iso-level-select" id="isoType" name="iso-level">
+            <option value="1" Selected>Read Uncommitted</option>
+            <option value="2">Read Committed</option>
+            <option value="3">Read Repeatable</option>
+            <option value="4">Serializable</option>
+        </select>
     </body>
 </html>
