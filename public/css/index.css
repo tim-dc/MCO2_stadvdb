@@ -1,5 +1,90 @@
+/* 
+Light Blue  - #889eb9
+Medium Blue - #547296
+Dark Blue   - #0B132B
+*/
+
 body {
-    background-color:red;
-    height: 100%;
+    background-color: #889eb9;
+    height: auto;
+    width: auto;
+}
+
+.container {
+    width: auto;
+    height: 100px;
+}
+
+.header3rem {
+    font-size: 3rem
+}
+
+.header2rem{
+    font-size: 2rem;
+}
+
+.flexdiv {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flexchild {
+    flex-grow: 1;
+}
+
+.flexchild_2row {
+    flex: 2 0 35%;
+    margin: 5px;
+    height: 100px;
+}
+
+.padding1rem{
+    padding: 1rem;
+}
+
+.item-margin1rem{
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.margin1rem {
+    margin: 1rem;
+}
+
+.box {
+    border: red;
+    border-style: solid;
+}
+
+.center {
+    margin: 0;
+    text-align: center;    
+    justify-content: center;
+}
+
+.actions {
+    background-color: #547296 ;
+    height: auto;
+    width: auto;
+    padding-bottom: 2rem;
+}
+
+#node1-container {
+    background-color: rgb(219, 199, 173);
     width: 100%;
+}
+
+#node2-container {
+    background-color: rgb(219, 199, 173);
+    width: 100%;
+}
+
+#node3-container {
+    background-color: rgb(219, 199, 173);
+    width: 100%;
+}
+
+#controls {
+    background-color: #527ec0;
+    border-radius: 10px;
 }

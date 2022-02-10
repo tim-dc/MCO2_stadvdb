@@ -7,19 +7,133 @@
 
     </head>
 
-    <body>
-        <form method="POST">
-            <button type="submit">Success</button>
-            <input class="form-check-input" type="checkbox" id="node1-switch" name="nodeone" value="0">
-            <input class="form-check-input" type="checkbox" id="node2-switch" name="nodetwo" value="0">
-            <input class="form-check-input" type="checkbox" id="node3-switch" name="nodethree" value="0">
+    <d>
+        <div>
+            <!-- TITLE -->
+            <div class="header3rem">
+                STADVDB MCO2 Web Application
+            </div>
 
-            <select class="form-select" id="isoType" name="select">
-                <option value="1"Selected>Read Uncommitted</option>
-                <option value="2">Read Committed</option>
-                <option value="3">Read Repeatable</option>
-                <option value="4">Serializable</option>
-            </select>
-        </form>     
+            <div class="flexdiv margin1rem" id="controls">
+        
+                <div class="margin1rem">
+                    <form method="POST">
+                        <button type="submit"> Submit</button>
+                    </form>  
+                </div>
+                    
+                <div class="item-margin1rem">
+                    <form method="POST">
+                        <h4>Node 1</h4>
+                        <input class="form-check-input" type="checkbox" id="node1-switch" name="nodeone" value="0">
+                    </form>
+                </div>
+                    
+                <div class="item-margin1rem">
+                    <form method="POST">
+                        <h4>Node 2</h4>
+                        <input class="form-check-input" type="checkbox" id="node2-switch" name="nodetwo" value="0">
+                    </form>
+                </div>       
+    
+                <div class="item-margin1rem">
+                    <form method="POST">
+                        <h4>Node 3</h4>
+                        <input class="form-check-input" type="checkbox" id="node3-switch" name="nodethree" value="0">
+                    </form>
+                    
+                </div>
+
+                <div class="margin1rem">
+                    <form method="POST">
+                        <select class="form-select" id="isoType" name="select">
+                            <option value="1"Selected> Read Uncommitted </option>
+                            <option value="2"> Read Committed </option>
+                            <option value="3"> Read Repeatable </option>
+                            <option value="4"> Serializable </option>
+                        </select>
+                    </form>
+                </div>  
+
+            </div>
+
+        </div>
+
+        <div>
+            <div class="header2rem margin1rem">
+                Commands
+            </div>
+
+            <div class="margin1rem flexdiv">
+                <div class="header2rem flexchild_2row actions">
+                    <div>
+                        <h4 class="center ">Add </h4>
+
+                        <form method="POST" class="center ">
+                            <input type="search">
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="header2rem flexchild_2row actions">
+                    <div>
+                       <h4 class="center">Delete </h4>
+
+                        <form method="POST" class="center ">
+                            <input type="search">
+                        </form>
+
+                    </div>
+                </div>
+            </div> 
+
+            <div class="margin1rem flexdiv ">
+                <div class="header2rem flexchild_2row actions">
+                    <div>
+                        <h4 class="center">Update </h4>
+
+                        <form method="POST" class="center ">
+                            <input type="search">
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="header2rem flexchild_2row actions">
+                    <div>
+                        <h4 class="center">Select </h4>
+
+                        <form method="POST" class="center ">
+                            <input type="search"> 
+                        </form>
+
+                    </div>
+                </div>
+            </div>    
+               
+        </div>
+
+        <div> 
+
+            <div class="flexdiv"> 
+                <!-- Container for 3 nodes-->
+                <div class="margin1rem container flexchild" id="node1-container">
+                    <h4 class="center"> Node 1 </h4c>
+                </div>
+    
+                <div class="margin1rem container flexchild" id="node2-container">
+                    <h4 class="center"> Node 2 </h4>
+                </div>
+
+                <div class="margin1rem container flexchild" id="node3-container">
+                    <h4 class="center">  Node 3 </h4>
+                </div>
+                    
+            </div> 
+
+        </div>
+
+       
     </body>
 </html>
