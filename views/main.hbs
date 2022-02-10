@@ -9,16 +9,18 @@
 
     <body>
 
-         <button type="button" id="">Success</button>
-        <input class="form-check-input" type="checkbox" id="node1-switch">
-        <input class="form-check-input" type="checkbox" id="node2-switch">
-        <input class="form-check-input" type="checkbox" id="node3-switch">
+        <form>
+            <button type="button" id="">Success</button>
+            <input class="form-check-input" type="checkbox" id="node1-switch">
+            <input class="form-check-input" type="checkbox" id="node2-switch">
+            <input class="form-check-input" type="checkbox" id="node3-switch">
 
-        <select class="form-select" aria-label="iso-level-select" id="isoType" name="iso-level">
-            <option value="1" Selected>Read Uncommitted</option>
-            <option value="2">Read Committed</option>
-            <option value="3">Read Repeatable</option>
-            <option value="4">Serializable</option>
-        </select>
+            <select class="form-select" id="isoType">
+                <option value="1" Selected>Read Uncommitted</option>
+                <option value="2">Read Committed</option>
+                <option value="3">Read Repeatable</option>
+                <option value="4">Serializable</option>
+            </select>
+        </form>
     </body>
 </html>
