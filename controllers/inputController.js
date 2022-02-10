@@ -6,8 +6,8 @@ const inputController = {
 
     getIsolationLevel: function(req, res){
         //const isolevel = req.body.isolevel;
-        console.log("hatdog");
-        console.log(req.body.isolevel);
+        //console.log("hatdog");
+        console.log(req.body.select);
     }
 }
 
