@@ -1,11 +1,16 @@
-<html>
+<!doctype html>
+<html lang="en">
     <head>
         <title></title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="/js/index.js"></script>
+        <script src="/js/importSQL.js" type="text/javascript"></script>
+        <script src="/js/jquery.appear.js"></script>  
+        <script src="/js/jquery-2.2.3.js" type="text/javascript"></script>
         <link rel="stylesheet" href="/css/index.css"/>
 
     </head>
+<body>
 
     <div>
         <div>
@@ -74,7 +79,7 @@
 
                     <div class="margin1rem">
                         <form method="POST">
-                            <button id="run-case1"> Run </button>
+                            <button class="caseOneBtn" id="run-case1"> Run </button>
                         </form>  
                     </div>
                 </div>
@@ -83,7 +88,7 @@
                     <h4 class=""> Case 2 </h4>
                     <div class="margin1rem">
                         <form method="POST">
-                            <button id="run-case2"> Run </button>
+                            <button class="caseTwoBtn" id="run-case2"> Run </button>
                         </form>  
                     </div>
                 </div>
@@ -93,7 +98,7 @@
 
                     <div class="margin1rem">
                         <form method="POST">
-                            <button id="run-case3"> Run </button>
+                            <button class="caseThreeBtn" id="run-case3"> Run </button>
                         </form>  
                     </div>
                 </div>
@@ -103,5 +108,5 @@
         </div>
     </div>
        
-    </body>
+</body>
 </html>
