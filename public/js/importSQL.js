@@ -14,7 +14,7 @@ function displaySQLData(event){
 
     if(valid){
         jQuery.post('/', function(result){
-            location.reload(true);
+            //location.reload(true);
             //console.log(result);
         });
 
