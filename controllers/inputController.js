@@ -8,7 +8,9 @@ const inputController = {
     },
 
     getIsolationLevel: async function(req, res){
-        const isolevel = req.body.isolevel;
+        const isolevel = req.body.select;
+
+        console.log(isolevel);
 
         const movie_id = 6;  // (Can be edited)
         const movie_year = 1975  // (Can be edited)
@@ -61,15 +63,21 @@ const inputController = {
             return `Error selecting data`;
 
         }
-
+            node1.end();
             //console.log(req.body.select);
             res.redirect('/')
     },
 
-    getButtonTwo: function(req, res){
-        const isolevel = req.body.isolevel;
-        node1.execute("SELECT * FROM movies WHERE movie_id=?",[6],(err,result)=>{
-            console.log(result);
+    getButtonTwo: async function(req, res){
+       
+        const node1 = await mysql.createConnection(config.db1);
+        console.log("hatdog");
+        const movie_id = 6;  // (Can be edited)
+        const movie_year = 1975  // (Can be edited)
+        //const isolevel = req.body.isolevel;
+        node1.config.namedPlaceholders = true;
+        node1.execute( "SELECT * FROM movies WHERE movie_id= :x", {x: movie_id}, (err,rows) => {
+            console.log("success");
         });
         //console.log(req.body.select);
         res.redirect('/')
