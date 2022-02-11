@@ -5,7 +5,6 @@ $(function(){
     isoLevel = $('#isolation-level').val();
 
     
-    
     $('#run-case1').on('click', function() {
         isoLevel = $('#isolation-level').val();
   
