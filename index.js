@@ -70,6 +70,6 @@ async function case1() {
 // Call function
 (async function testCase1() {
     console.log(await case1());
-    //process.exit(0);
+    // process.exit(0);
   })();
 
