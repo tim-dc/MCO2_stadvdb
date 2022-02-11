@@ -29,7 +29,7 @@ const inputController = {
             console.log(result);
         });
         //console.log(req.body.select);
-        //res.redirect('/')
+        res.redirect('/')
     }
 }
 
