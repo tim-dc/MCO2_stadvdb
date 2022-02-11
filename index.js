@@ -3,7 +3,7 @@ const hbs = require('hbs');
 const routes = require('./routes/routes.js');
 
 const app = express();
-const port = 8080;
+const port = 3030;
 
 app.set('view engine', 'hbs');
 app.set('views', './views');
