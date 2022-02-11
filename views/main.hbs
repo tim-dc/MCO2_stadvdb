@@ -7,7 +7,7 @@
 
     </head>
 
-    <d>
+    <div>
         <div>
             <!-- TITLE -->
             <div class="header3rem">
@@ -22,23 +22,29 @@
                     </form>  
                 </div>
                     
+                <div class="margin1rem">
+                    <form method="POST">
+                        <button type="submit"> Reset</button>
+                    </form>  
+                </div>
+
                 <div class="item-margin1rem">
                     <form method="POST">
-                        <h4>Node 1</h4>
+                        <h4>Enable Node 1</h4>
                         <input class="form-check-input" type="checkbox" id="node1-switch" name="nodeone" value="0">
                     </form>
                 </div>
                     
                 <div class="item-margin1rem">
                     <form method="POST">
-                        <h4>Node 2</h4>
+                        <h4>Enable Node 2</h4>
                         <input class="form-check-input" type="checkbox" id="node2-switch" name="nodetwo" value="0">
                     </form>
                 </div>       
     
                 <div class="item-margin1rem">
                     <form method="POST">
-                        <h4>Node 3</h4>
+                        <h4>Enable Node 3</h4>
                         <input class="form-check-input" type="checkbox" id="node3-switch" name="nodethree" value="0">
                     </form>
                     
@@ -59,81 +65,43 @@
 
         </div>
 
-        <div>
-            <div class="header2rem margin1rem">
-                Commands
-            </div>
-
-            <div class="margin1rem flexdiv">
-                <div class="header2rem flexchild_2row actions">
-                    <div>
-                        <h4 class="center ">Add </h4>
-
-                        <form method="POST" class="center ">
-                            <input type="search">
-                        </form>
-
-                    </div>
-                </div>
-
-                <div class="header2rem flexchild_2row actions">
-                    <div>
-                       <h4 class="center">Delete </h4>
-
-                        <form method="POST" class="center ">
-                            <input type="search">
-                        </form>
-
-                    </div>
-                </div>
-            </div> 
-
-            <div class="margin1rem flexdiv ">
-                <div class="header2rem flexchild_2row actions">
-                    <div>
-                        <h4 class="center">Update </h4>
-
-                        <form method="POST" class="center ">
-                            <input type="search">
-                        </form>
-
-                    </div>
-                </div>
-
-                <div class="header2rem flexchild_2row actions">
-                    <div>
-                        <h4 class="center">Select </h4>
-
-                        <form method="POST" class="center ">
-                            <input type="search"> 
-                        </form>
-
-                    </div>
-                </div>
-            </div>    
-               
-        </div>
-
         <div> 
 
             <div class="flexdiv"> 
-                <!-- Container for 3 nodes-->
+                
                 <div class="margin1rem container flexchild" id="node1-container">
-                    <h4 class="center"> Node 1 </h4c>
+                    <h4 class=""> Case 1 </h4c>
+
+                    <div class="margin1rem">
+                        <form method="POST">
+                            <button type="submit"> Run </button>
+                        </form>  
+                    </div>
                 </div>
     
                 <div class="margin1rem container flexchild" id="node2-container">
-                    <h4 class="center"> Node 2 </h4>
+                    <h4 class=""> Case 2 </h4>
+                    <div class="margin1rem">
+                        <form method="POST">
+                            <button type="submit"> Run </button>
+                        </form>  
+                    </div>
                 </div>
 
                 <div class="margin1rem container flexchild" id="node3-container">
-                    <h4 class="center">  Node 3 </h4>
+                    <h4 class="">  Case 3 </h4>
+
+                    <div class="margin1rem">
+                        <form method="POST">
+                            <button type="submit"> Run </button>
+                        </form>  
+                    </div>
                 </div>
                     
             </div> 
 
         </div>
-
+    </div>
        
     </body>
 </html>
