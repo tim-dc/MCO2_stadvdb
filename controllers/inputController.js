@@ -245,7 +245,7 @@ const inputController = {
             });
             // console.log(data2[0]);
 
-            data3 = await node1.execute(query1, {x: movie_id}, (err,rows) => {
+            const data3 = await node1.execute(query1, {x: movie_id}, (err,rows) => {
             });
             // console.log(data3[0]);
 
