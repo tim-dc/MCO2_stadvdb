@@ -6,7 +6,7 @@ app.get('/', inputController.getHomePage);
 app.post('/caseone', inputController.getCaseOneResult);
 
 app.post('/casetwo', inputController.getCaseTwoResult);
-app.post('/casethree', inputController.getCaseTwoResult);
+app.post('/casethree', inputController.getCaseThreeResult);
 app.post('/resetCaseTwo', inputController.resetCaseTwo)
 
 
