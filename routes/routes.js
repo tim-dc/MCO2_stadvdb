@@ -6,5 +6,7 @@ app.get('/', inputController.getHomePage);
 app.post('/caseone', inputController.getCaseOneResult);
 
 app.post('/casetwo', inputController.getCaseTwoResult);
+app.post('/casethree', inputController.getCaseTwoResult);
+
 
 module.exports = app;

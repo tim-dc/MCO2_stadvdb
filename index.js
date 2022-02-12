@@ -17,6 +17,8 @@ app.listen(port, function () {
     console.log('listening to port ' + port);
 });
 
+
+
 // const mysql = require('mysql2');
 // const config = require('./config/config'); // nodes
 // const async = require('hbs/lib/async');
