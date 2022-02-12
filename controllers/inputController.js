@@ -92,7 +92,7 @@ const inputController = {
 
         }
 
-            node1.end(); // Close connection
+           
             console.log("");
             //console.log(req.body.select);
 
@@ -126,13 +126,15 @@ const inputController = {
 
         }
 
-            node2.end(); // Close connection
+        
             console.log("");
             //console.log(req.body.select);
             res.redirect('/')
 
             console.log("--------------------------------------------------------------------------\n");
 
+            node1.end();
+            node2.end();
 
     },
 
@@ -218,7 +220,7 @@ const inputController = {
 
         }
 
-            node1.end(); // Close connection
+    
             console.log("");
             //console.log(req.body.select);
 
@@ -239,25 +241,41 @@ const inputController = {
             
             console.log(data[0].info);
 
+            const data2 = await node2.execute(query1, {x: movie_id}, (err,rows) => {
+            });
+            // console.log(data2[0]);
+
+            data3 = await node1.execute(query1, {x: movie_id}, (err,rows) => {
+            });
+            // console.log(data3[0]);
+
+            if(data2[0] != data3[0]) {
+                await node1.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
+                });
+            }
+
             // Commit to confirm Transaction
             await node2.commit();
             console.log("Committed");
 
         }catch (err) {
             // Roll back Portion
-            console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+            console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
             node2.rollback();
             console.info('Rollback successful');
             return `Error selecting data`;
 
         }
 
-            node2.end(); // Close connection
+            
             console.log("");
             //console.log(req.body.select);
             res.redirect('/')
 
             console.log("--------------------------------------------------------------------------\n");
+
+            node1.end();
+            node2.end();
     },
 
     // Case Three:  WRITE and WRITE
