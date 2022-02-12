@@ -342,7 +342,7 @@ const inputController = {
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
         console.log("SQL: " + query2 );
         console.log("movie_id: " + movie_id_t1 );
-        console.log("movie_year: " + movie_id_t1  + "\n");
+        console.log("movie_year: " + movie_year_t1  + "\n");
 
         // Transaction Start (NODE 1)
         await node1.beginTransaction();
