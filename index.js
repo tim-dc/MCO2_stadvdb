@@ -23,53 +23,61 @@ app.listen(port, function () {
 // const mysql = require('mysql2/promise');
 
 // async function case1() {        
-    //  Set values to change (UPDATE)
-    // const movie_id = 6;  // (Can be edited)
-    // const movie_year = 1975  // (Can be edited)
+//     //  Set values to change (UPDATE)
+//     const movie_id = 6;  // (Can be edited)
+//     const movie_year = 1975  // (Can be edited)
 
-    // // Connects to node 1
-    // const node1 = await mysql.createConnection(config.db1);
+//     // Connects to node 1
+//     const node1 = await mysql.createConnection(config.db1);
 
-    // // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
-    // node1.config.namedPlaceholders = true;
+//     // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
+//     node1.config.namedPlaceholders = true;
     
-    // // Set Transaction Level 
-    // await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-    // console.log("Isolation level is now 'READ COMMITTED'");
+//     // Set Transaction Level 
+//     await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+//     console.log("Isolation level is now 'READ COMMITTED'");
 
-    // // Transaction Start
-    // await node1.beginTransaction();
+//     // Transaction Start
+//     await node1.beginTransaction();
 
-    // try{
-    //     // SQL Statement 1
-    //     await node1.execute( "SELECT * FROM movies WHERE movie_id= :x", {x: movie_id}, (err,rows) => {
-    //     });
+//     try{
+//         // SQL Statement 1
+//         await node1.execute( "SELECT * FROM movies WHERE movie_id= :x", {x: movie_id}, (err,rows) => {
+//             console.log("HERE");
+//         });
 
-    //     console.log("Selected movie_id = 6")
+//         console.log("Selected movie_id = 6")
         
-    //     // SQL Statement 2
-    //     await node1.execute("UPDATE movies SET movie_year = :x WHERE movie_id = :y", {x: movie_year, y:movie_id},  (err,rows) => {
-    //     });
+//         // SQL Statement 2
+//         await node1.execute("UPDATE movies SET movie_year = :x WHERE movie_id = :y", {x: movie_year, y:movie_id},  (err,rows) => {
+//             console.log("HERE");
+//         });
 
-    //     console.log("Updated year to 1975");
+//         console.log("Updated year to 1975");
 
-    //     // Commit to confirm Transaction
-    //     await node1.commit();
+//         // Commit to confirm Transaction
+//         await node1.commit();
 
-    // }catch (err) {
-    //     // Roll back Portion
-    //     console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
-    //     node1.rollback();
-    //     console.info('Rollback successful');
-    //     return `Error selecting data`;
+//     }catch (err) {
+//         // Roll back Portion
+//         console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+//         node1.rollback();
+//         console.info('Rollback successful');
+//         return `Error selecting data`;
 
-    // }
+//     }
+
+//     node1.query( "SELECT * FROM movies WHERE movie_id= :x", {x: movie_id}, (err,rows) => {
+//         console.log("HERE");
+//     });
+
     
-//}
+    
+    
+// }
 
 // Call function
 // (async function testCase1() {
 //     console.log(await case1());
 //     // process.exit(0);
 //   })();
-
