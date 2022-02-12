@@ -3,8 +3,8 @@ const app = express();
 const inputController = require('../controllers/inputController');
 
 app.get('/', inputController.getHomePage);
-app.post('/', inputController.getIsolationLevel);
+app.post('/caseone', inputController.getCaseOneResult);
 
-app.post('/btntwo', inputController.getButtonTwo);
+app.post('/casetwo', inputController.getCaseTwoResult);
 
 module.exports = app;
