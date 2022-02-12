@@ -7,7 +7,11 @@ const inputController = {
         res.render('main');
     },
 
-    // CASE ONE: READ ONLY
+    resetCaseTwo: function (req,res){
+ 
+    },
+
+    // Case one: READ ONLY
     getCaseOneResult: async function(req, res){
         const isolevel = req.body.select;
 
@@ -59,8 +63,12 @@ const inputController = {
         console.log("             'READ COMMITTED'");
         console.log("------------------------------------------");
 
-        console.log("\n-------------------- Transaction Starts Here ---------------------");
-  
+        console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        console.log("SQL: " + query1 );
+        console.log("movie_id: " + movie_id );
+        console.log("movie_year: " + movie_year + "\n");
+
+
         // Transaction Start (NODE 1)
         await node1.beginTransaction();
 
@@ -87,27 +95,62 @@ const inputController = {
             node1.end(); // Close connection
             console.log("");
             //console.log(req.body.select);
+
+        console.log("--------------------------------------------------------------------------\n");
+
+        console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
+        console.log("SQL: " + query1 );
+        console.log("movie_id: " + movie_id );
+        console.log("movie_year: " + movie_year + "\n");
+
+        // Transaction Start (NODE 1)
+        await node2.beginTransaction();
+
+        try{
+            // SQL Statement 1
+            const data = await node2.execute(query1, {x: movie_id}, (err,rows) => {
+            });
+            
+            console.log(data[0]);
+
+            // Commit to confirm Transaction
+            await node2.commit();
+            console.log("Committed");
+
+        }catch (err) {
+            // Roll back Portion
+            console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+            node2.rollback();
+            console.info('Rollback successful');
+            return `Error selecting data`;
+
+        }
+
+            node2.end(); // Close connection
+            console.log("");
+            //console.log(req.body.select);
             res.redirect('/')
 
-        console.log("------------------------------------------------------------------\n");
+            console.log("--------------------------------------------------------------------------\n");
+
 
     },
 
-    // CASE TWO: READ AND WRITE
+    // Case Two: READ and WRITE
     getCaseTwoResult: async function(req, res){
         const isolevel = req.body.select;
 
         console.log("isoLevel = " + isolevel);
 
-        const movie_id = 15;  // (Can be edited)
-        const movie_year = 1975  // (Can be edited)
-        const query1 = "SELECT * FROM movies WHERE movie_id= :x"
+        const movie_id = 6;  // (Can be edited)
+        const movie_year = 1975;  // (Can be edited)
+        const query1 = "SELECT * FROM movies WHERE movie_id= :x";
+        const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
 
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
 
-        // NODE 1 CONNECTION TEST
         console.log("------ Node Status ------");
 
         const node1Status = node1.connect(function(err) {
@@ -146,7 +189,11 @@ const inputController = {
         console.log("             'READ COMMITTED'");
         console.log("------------------------------------------");
 
-        console.log("\n-------------------- Transaction Starts Here ---------------------");
+        console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        console.log("SQL: " + query1 );
+        console.log("movie_id: " + movie_id );
+
+
 
         // Transaction Start (NODE 1)
         await node1.beginTransaction();
@@ -172,26 +219,62 @@ const inputController = {
         }
 
             node1.end(); // Close connection
+            console.log("");
+            //console.log(req.body.select);
+
+        console.log("--------------------------------------------------------------------------\n");
+
+        console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
+        console.log("SQL: " + query2 );
+        console.log("movie_id: " + movie_id );
+        console.log("movie_year: " + movie_year + "\n");
+
+        // Transaction Start (NODE 1)
+        await node2.beginTransaction();
+
+        try{
+            // SQL Statement 2
+            const data = await node2.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
+            });
+            
+            console.log(data[0].info);
+
+            // Commit to confirm Transaction
+            await node2.commit();
+            console.log("Committed");
+
+        }catch (err) {
+            // Roll back Portion
+            console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+            node2.rollback();
+            console.info('Rollback successful');
+            return `Error selecting data`;
+
+        }
+
+            node2.end(); // Close connection
+            console.log("");
             //console.log(req.body.select);
             res.redirect('/')
 
-        console.log("------------------------------------------------------------------\n");
+            console.log("--------------------------------------------------------------------------\n");
     },
 
+    // Case Three:  WRITE and WRITE
     getCaseThreeResult: async function(req, res){
         const isolevel = req.body.select;
 
         console.log("isoLevel = " + isolevel);
 
-        const movie_id = 15;  // (Can be edited)
-        const movie_year = 1975  // (Can be edited)
-        const query1 = "SELECT * FROM movies WHERE movie_id= :x"
+        const movie_id = 6;  // (Can be edited)
+        const movie_year = 1975;  // (Can be edited)
+        const query1 = "SELECT * FROM movies WHERE movie_id= :x";
+        const query2 = "";
 
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
 
-        // NODE 1 CONNECTION TEST
         console.log("------ Node Status ------");
 
         const node1Status = node1.connect(function(err) {
@@ -230,7 +313,11 @@ const inputController = {
         console.log("             'READ COMMITTED'");
         console.log("------------------------------------------");
 
-        console.log("\n-------------------- Transaction Starts Here ---------------------");
+        console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        console.log("SQL: " + query1 );
+        console.log("movie_id: " + movie_id );
+        console.log("movie_year: " + movie_year + "\n");
+
 
         // Transaction Start (NODE 1)
         await node1.beginTransaction();
@@ -256,10 +343,45 @@ const inputController = {
         }
 
             node1.end(); // Close connection
+            console.log("");
+            //console.log(req.body.select);
+
+        console.log("--------------------------------------------------------------------------\n");
+
+        console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
+        console.log("SQL: " + query1 );
+        console.log("movie_id: " + movie_id );
+        console.log("movie_year: " + movie_year + "\n");
+
+        // Transaction Start (NODE 1)
+        await node2.beginTransaction();
+
+        try{
+            // SQL Statement 1
+            const data = await node2.execute(query1, {x: movie_id}, (err,rows) => {
+            });
+            
+            console.log(data[0]);
+
+            // Commit to confirm Transaction
+            await node2.commit();
+            console.log("Committed");
+
+        }catch (err) {
+            // Roll back Portion
+            console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+            node2.rollback();
+            console.info('Rollback successful');
+            return `Error selecting data`;
+
+        }
+
+            node2.end(); // Close connection
+            console.log("");
             //console.log(req.body.select);
             res.redirect('/')
 
-        console.log("------------------------------------------------------------------\n");
+            console.log("--------------------------------------------------------------------------\n");
 
     },
     

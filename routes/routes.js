@@ -7,6 +7,7 @@ app.post('/caseone', inputController.getCaseOneResult);
 
 app.post('/casetwo', inputController.getCaseTwoResult);
 app.post('/casethree', inputController.getCaseTwoResult);
+app.post('/resetCaseTwo', inputController.resetCaseTwo)
 
 
 module.exports = app;
