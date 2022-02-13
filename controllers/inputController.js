@@ -137,24 +137,32 @@ const inputController = {
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
-        switch(isolevel)
+        if(isolevel == '1')
         {
-            case '1': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-                      console.log("             'READ UNCOMMITTED'");
-                      break;
-            case '2': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-                      console.log("             'READ COMMITTED'");
-                      break;
-            case '3': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-                      console.log("             'READ REPEATABLE'");
-                      break;
-            case '4': await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-                      console.log("             'SERIALIZABLE'");
-                      break;
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            console.log("             'READ UNCOMMITTED'");
+        }
+
+        if(isolevel == '2')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            console.log("             'READ COMMITTED'");
+        }
+
+        if(isolevel == '3')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+        }
+
+        if(isolevel == '4')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            console.log("             'SERIALIZABLE'");
         }
         console.log("------------------------------------------");
 
@@ -280,24 +288,32 @@ const inputController = {
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
-        switch(isolevel)
+        if(isolevel == '1')
         {
-            case '1': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-                      console.log("             'READ UNCOMMITTED'");
-                      break;
-            case '2': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-                      console.log("             'READ COMMITTED'");
-                      break;
-            case '3': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-                      console.log("             'READ REPEATABLE'");
-                      break;
-            case '4': await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-                      console.log("             'SERIALIZABLE'");
-                      break;
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            console.log("             'READ UNCOMMITTED'");
+        }
+
+        if(isolevel == '2')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            console.log("             'READ COMMITTED'");
+        }
+
+        if(isolevel == '3')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+        }
+
+        if(isolevel == '4')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            console.log("             'SERIALIZABLE'");
         }
         console.log("------------------------------------------");
 
@@ -444,25 +460,35 @@ const inputController = {
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
-        switch(isolevel)
+
+        if(isolevel == '1')
         {
-            case '1': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-                      console.log("             'READ UNCOMMITTED'");
-                      break;
-            case '2': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-                      console.log("             'READ COMMITTED'");
-                      break;
-            case '3': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-                      console.log("             'READ REPEATABLE'");
-                      break;
-            case '4': await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-                      await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-                      console.log("             'SERIALIZABLE'");
-                      break;
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            console.log("             'READ UNCOMMITTED'");
         }
+
+        if(isolevel == '2')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            console.log("             'READ COMMITTED'");
+        }
+
+        if(isolevel == '3')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+        }
+
+        if(isolevel == '4')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            console.log("             'SERIALIZABLE'");
+        }
+        
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
