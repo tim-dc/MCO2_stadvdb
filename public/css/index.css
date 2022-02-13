@@ -84,6 +84,26 @@ body {
     width: 100%;
 }
 
+#node4-container {
+    background-color: rgba(219, 199, 173, 0.671);
+    width: 100%;
+}
+
+#node5-container {
+    background-color: rgba(219, 199, 173, 0.671);
+    width: 100%;
+}
+
+#node6-container {
+    background-color: rgba(219, 199, 173, 0.671);
+    width: 100%;
+}
+
+#node7-container {
+    background-color: rgba(219, 199, 173, 0.671);
+    width: 100%;
+}
+
 #controls {
     background-color: #527ec0;
     border-radius: 10px;
