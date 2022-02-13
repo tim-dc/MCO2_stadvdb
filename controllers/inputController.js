@@ -92,7 +92,7 @@ const inputController = {
 
     // Case one: READ ONLY
     getCaseOneResult: async function(req, res){
-        const isolevel = req.body.select;
+        const isolevel = req.body.isolevel;
 
         console.log("isoLevel = " + isolevel);
 
@@ -137,9 +137,25 @@ const inputController = {
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
-        await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-        await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-        console.log("             'READ COMMITTED'");
+        switch(isolevel)
+        {
+            case '1': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+                      console.log("             'READ UNCOMMITTED'");
+                      break;
+            case '2': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+                      console.log("             'READ COMMITTED'");
+                      break;
+            case '3': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                      console.log("             'READ REPEATABLE'");
+                      break;
+            case '4': await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+                      console.log("             'SERIALIZABLE'");
+                      break;
+        }
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
@@ -218,7 +234,7 @@ const inputController = {
 
     // Case Two: READ and WRITE
     getCaseTwoResult: async function(req, res){
-        const isolevel = req.body.select;
+        const isolevel = req.body.isolevel;
 
         console.log("isoLevel = " + isolevel);
 
@@ -264,9 +280,25 @@ const inputController = {
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
-        await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-        await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-        console.log("             'READ COMMITTED'");
+        switch(isolevel)
+        {
+            case '1': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+                      console.log("             'READ UNCOMMITTED'");
+                      break;
+            case '2': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+                      console.log("             'READ COMMITTED'");
+                      break;
+            case '3': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                      console.log("             'READ REPEATABLE'");
+                      break;
+            case '4': await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+                      console.log("             'SERIALIZABLE'");
+                      break;
+        }
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
@@ -358,7 +390,7 @@ const inputController = {
 
     // Case Three:  WRITE and WRITE
     getCaseThreeResult: async function(req, res){
-        const isolevel = req.body.select;
+        const isolevel = req.body.isolevel;
 
         console.log("isoLevel = " + isolevel);
 
@@ -412,9 +444,25 @@ const inputController = {
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
-        await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-        await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-        console.log("             'READ COMMITTED'");
+        switch(isolevel)
+        {
+            case '1': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+                      console.log("             'READ UNCOMMITTED'");
+                      break;
+            case '2': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+                      console.log("             'READ COMMITTED'");
+                      break;
+            case '3': await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                      console.log("             'READ REPEATABLE'");
+                      break;
+            case '4': await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+                      await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+                      console.log("             'SERIALIZABLE'");
+                      break;
+        }
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");

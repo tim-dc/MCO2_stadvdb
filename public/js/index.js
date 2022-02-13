@@ -7,15 +7,22 @@ $(function(){
     
     $('#run-case1').on('click', function() {
         isoLevel = $('#isolation-level').val();
-  
+        var inputIso = document.getElementById("iso-level-one");
+        inputIso.setAttribute('value', isoLevel);
         console.log("Running Case 1 with Isolation level - " + isoLevel);
     });
 
     $('#run-case2').on('click', function() {
+        isoLevel = $('#isolation-level').val();
+        var inputIso = document.getElementById("iso-level-two");
+        inputIso.setAttribute('value', isoLevel);
         console.log("Running Case 2");
     });
 
     $('#run-case3').on('click', function() {
+        isoLevel = $('#isolation-level').val();
+        var inputIso = document.getElementById("iso-level-three");
+        inputIso.setAttribute('value', isoLevel);
         console.log("Running Case 3");
     });
 
