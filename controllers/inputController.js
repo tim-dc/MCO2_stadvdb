@@ -919,10 +919,8 @@ const inputController = {
 
     },
 
-<<<<<<< Updated upstream
-    getTestFive: function(req, res){
+   
 
-=======
     getCaseFourResult: async function(req,res) {
         const isolevel = req.body.isolevel;
 
@@ -1057,7 +1055,10 @@ const inputController = {
 
 
         res.redirect('/');
->>>>>>> Stashed changes
+    },
+
+    getTestFive: function(req, res){
+        
     },
 
 }
