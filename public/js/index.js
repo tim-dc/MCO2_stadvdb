@@ -60,9 +60,9 @@ $(function(){
         var checktwo = document.querySelector('#node2-switch').checked;
         var checkthree = document.querySelector('#node3-switch').checked;
 
-        var inputNode1 = document.getElementById("check-node-one");
-        var inputNode2 = document.getElementById("check-node-two");
-        var inputNode3 = document.getElementById("check-node-three");
+        var inputNode1 = document.getElementById("c2-check-node-one");
+        var inputNode2 = document.getElementById("c2-check-node-two");
+        var inputNode3 = document.getElementById("c2-check-node-three");
 
         if(checkone)
         {        
@@ -103,9 +103,9 @@ $(function(){
         var checktwo = document.querySelector('#node2-switch').checked;
         var checkthree = document.querySelector('#node3-switch').checked;
 
-        var inputNode1 = document.getElementById("check-node-one");
-        var inputNode2 = document.getElementById("check-node-two");
-        var inputNode3 = document.getElementById("check-node-three");
+        var inputNode1 = document.getElementById("c3-check-node-one");
+        var inputNode2 = document.getElementById("c3-check-node-two");
+        var inputNode3 = document.getElementById("c3-check-node-three");
 
         if(checkone)
         {        
