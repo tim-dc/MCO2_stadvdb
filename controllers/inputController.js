@@ -1240,28 +1240,24 @@ const inputController = {
         if(isolevel == '1')
         {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             console.log("             'READ UNCOMMITTED'");
         }
 
         if(isolevel == '2')
         {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             console.log("             'READ COMMITTED'");
         }
 
         if(isolevel == '3')
         {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
             console.log("             'READ REPEATABLE'");
         }
 
         if(isolevel == '4')
         {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             console.log("             'SERIALIZABLE'");
         }
         
@@ -1285,6 +1281,7 @@ const inputController = {
                 const data2 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                 });
 
+                // copy node 2 to central node
                 if(node1check == node2check){
                     const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
                     });
@@ -1293,11 +1290,30 @@ const inputController = {
                         await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
                     }
+
+                    
                 }
 
                 if(node2check != '1')
                 {
                     throw `Node 2 is offline, Transaction cannot be committed.`;
+                }
+
+                // copy node 3 to central node
+                if(node1check == node3check){
+                    const data3 = await node3.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                    });
+
+                    if(data2[0] != data3[0]) {
+                        await node3.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                        });
+                    }
+
+                }
+
+                if(node3check != '1')
+                {
+                    throw `Node 3 is offline, Transaction cannot be committed.`;
                 }
               
                 
@@ -1315,47 +1331,8 @@ const inputController = {
                 return `Error selecting data`;
             }
 
-        }else if(node2check == '1'){
-            await node2.beginTransaction();
-
-            try{
-                // SQL Statement 1
-                const data = await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
-                });
-
-                const data2 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
-                });
-
-                if(node2check == node1check){
-                    const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
-                    });
-
-                    if(data2[0] != data3[0]) {
-                        await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
-                        });
-                    }
-                }
-
-                if(node1check != '1')
-                {
-                    throw `Node 1 is offline, Transaction cannot be committed.`;
-                }
-              
-                
-                console.log(data[0].info);
-
-            
-                // Commit to confirm Transaction
-                await node2.commit();
-                console.log("Transaction Complete");
-            }catch (err) {
-                // Roll back Portion
-                console.error(`Error Occured : ${err.message}`, err);
-                node1.rollback();
-                console.info('Rollback successful');
-                return `Error selecting data`;
-            }
         }
+
 
         console.log("");
         //console.log(req.body.select);
