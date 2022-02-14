@@ -1145,7 +1145,7 @@ const inputController = {
         res.redirect('/')
     },
 
-    getCaseFiveResult: function(req, res){
+    getCaseFiveResult: async function(req, res){
         const isolevel = req.body.isolevel;
         const node1check = req.body.c5checknodeone;
         const node2check = req.body.c5checknodetwo;
@@ -1629,7 +1629,8 @@ const inputController = {
         const node2check = req.body.c7checknodetwo;
         const node3check = req.body.c7checknodethree;
         
-        var node1error = node1check;
+        var node2error = node2check;
+        var node3error = node3check;
         
         console.log("isoLevel = " + isolevel);
 
@@ -1742,26 +1743,26 @@ const inputController = {
         console.log("movie_year: " + movie_year_t1 + "\n");
 
         // Transaction Start (NODE 1)
-        if(node2check == '1'  && node1check == '1')
+        if(node1check == '1' && node2check =='1')
         {
-            node1error = 0;
+            node2error = 0;
 
-            await node2.beginTransaction();
+            await node1.beginTransaction();
 
             try{
                 // SQL Statement 1
-                const data = await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                 });
 
-                const data2 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                const data2 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                 });
 
-                if(node2check == node1error){
-                    const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                if(node1check == node2error){
+                    const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
                     });
 
                     if(data2[0] != data3[0]) {
-                        await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                        await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
                     }
                 }else {
@@ -1769,17 +1770,17 @@ const inputController = {
 
                     await sleep(5000);
 
-                    node1error = node1check;
+                    node2error = node2check;
 
-                    if(node1error != '1')
+                    if(node2error != '1')
                     {
                         throw `Transaction Timeout. Changes cannot be committed.`
                     }else {
-                        const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                        const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
                         });
     
                         if(data2[0] != data3[0]) {
-                            await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                            await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                             });
                         }
                     }
@@ -1788,7 +1789,7 @@ const inputController = {
                 console.log(data[0].info);
             
                 // Commit to confirm Transaction
-                await node2.commit();
+                await node1.commit();
                 console.log("Transaction Complete");
                 node1.end();
                 node2.end();
@@ -1804,25 +1805,25 @@ const inputController = {
                 return `Error selecting data`;
             }
 
-        }else if(node3check == '1' && node1check == '1'){
-            node1error = 0;
+        }else if(node1check == '1' && node3check == '1'){
+            node3error = 0;
 
-            await node3.beginTransaction();
+            await node1.beginTransaction();
 
             try{
                 // SQL Statement 1
-                const data = await node3.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                 });
 
-                const data2 = await node3.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                const data2 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                 });
 
-                if(node3check == node1error){
-                    const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                if(node1check == node2error){
+                    const data3 = await node3.execute(query1, {x:movie_id_t1}, (err,rows) => {
                     });
 
                     if(data2[0] != data3[0]) {
-                        await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                        await node3.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
                     }
                 }else {
@@ -1830,17 +1831,17 @@ const inputController = {
 
                     await sleep(5000);
 
-                    node1error = node1check;
+                    node3error = node3check;
 
-                    if(node1error != '1')
+                    if(node3error != '1')
                     {
                         throw `Transaction Timeout. Changes cannot be committed.`
                     }else {
-                        const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                        const data3 = await node3.execute(query1, {x:movie_id_t1}, (err,rows) => {
                         });
     
                         if(data2[0] != data3[0]) {
-                            await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                            await node3.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                             });
                         }
                     }
@@ -1849,7 +1850,7 @@ const inputController = {
                 console.log(data[0].info);
             
                 // Commit to confirm Transaction
-                await node2.commit();
+                await node1.commit();
                 console.log("Transaction Complete");
                 node1.end();
                 node2.end();
