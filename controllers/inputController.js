@@ -15,6 +15,7 @@ const inputController = {
 
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
+        const node3 = await mysql.createConnection(config.db3);
 
         console.log("------ Node Status ------");
 
@@ -39,11 +40,23 @@ const inputController = {
         }catch (error) {
             return error;
         }
+
+        const node3Status = node3.connect(function(err) {
+        });
+        try {
+            if(node3Status != null)
+            {
+                console.log('    Node3 is Active.');
+            }else console.log('    Node3 is OFFLINE.');
+        }catch (error) {
+            return error;
+        }
        
         console.log("-------------------------");
 
         node1.config.namedPlaceholders = true;
         node2.config.namedPlaceholders = true;
+        node3.config.namedPlaceholders = true;
 
         console.log("\n-------------------- RESET Starts Here (Node 1) ------------------");
         console.log("SQL: " + query2 );
@@ -86,6 +99,7 @@ const inputController = {
 
         node1.end();
         node2.end();
+        node3.end();
 
         res.redirect('/')
     },
@@ -95,6 +109,7 @@ const inputController = {
         const isolevel = req.body.isolevel;
         const node1check = req.body.checknodeone;
         const node2check = req.body.checknodetwo;
+        const node3check = req.body.checknodethree;
 
         console.log("isoLevel = " + isolevel);
 
@@ -105,6 +120,7 @@ const inputController = {
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
+        const node3 = await mysql.createConnection(config.db3);
 
         console.log("------ Node Status ------");
 
@@ -136,11 +152,26 @@ const inputController = {
             }
         }    
        
+        if(node3check == '1')
+        {
+            const node3Status = node3.connect(function(err) {
+            });
+            try {
+                if(node3Status != null)
+                {
+                    console.log('    Node2 is Active.');
+                }else console.log('    Node2 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        }    
+       
         console.log("-------------------------");
 
         // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
         node1.config.namedPlaceholders = true;
         node2.config.namedPlaceholders = true;
+        node3.config.namedPlaceholders = true;
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
@@ -244,6 +275,7 @@ const inputController = {
 
             node1.end();
             node2.end();
+            node3.end();
 
     },
 
@@ -261,6 +293,8 @@ const inputController = {
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
+        const node3 = await mysql.createConnection(config.db3);
+
 
         console.log("------ Node Status ------");
 
@@ -286,12 +320,25 @@ const inputController = {
         }catch (error) {
             return error;
         }
+
+        const node3Status = node3.connect(function(err) {
+        });
+        try {
+            if(node3Status != null)
+            {
+                console.log('    Node2 is Active.');
+            }else console.log('    Node2 is OFFLINE.');
+        }catch (error) {
+            return error;
+        }
        
         console.log("-------------------------");
 
         // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
         node1.config.namedPlaceholders = true;
         node2.config.namedPlaceholders = true;
+        node3.config.namedPlaceholders = true;
+
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
@@ -433,6 +480,8 @@ const inputController = {
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
+        const node3 = await mysql.createConnection(config.db3);
+
 
         console.log("------ Node Status ------");
 
@@ -458,12 +507,25 @@ const inputController = {
         }catch (error) {
             return error;
         }
+
+        const node3Status = node3.connect(function(err) {
+        });
+        try {
+            if(node3Status != null)
+            {
+                console.log('    Node2 is Active.');
+            }else console.log('    Node2 is OFFLINE.');
+        }catch (error) {
+            return error;
+        }
        
         console.log("-------------------------");
 
         // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
         node1.config.namedPlaceholders = true;
         node2.config.namedPlaceholders = true;
+        node3.config.namedPlaceholders = true;
+
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
@@ -595,6 +657,7 @@ const inputController = {
 
             node1.end();
             node2.end();
+            node3.end();
 
     },
 
