@@ -383,22 +383,23 @@ const inputController = {
         
             console.log("");
             //console.log(req.body.select);
+            node1.end();
+            node2.end();
+            node3.end();
             res.redirect('/')
 
             console.log("--------------------------------------------------------------------------\n");
 
-            node1.end();
-            node2.end();
-            node3.end();
+            
 
     },
 
     // Case Two: READ and WRITE
     getCaseTwoResult: async function(req, res){
         const isolevel = req.body.isolevel;
-        const node1check = req.body.checknodeone;
-        const node2check = req.body.checknodetwo;
-        const node3check = req.body.checknodethree;
+        const node1check = req.body.c2checknodeone;
+        const node2check = req.body.c2checknodetwo;
+        const node3check = req.body.c2checknodethree;
         
         console.log("isoLevel = " + isolevel);
 
@@ -634,20 +635,21 @@ const inputController = {
 
             console.log("");
             //console.log(req.body.select);
+            node1.end();
+            node2.end();
             res.redirect('/')
 
             console.log("--------------------------------------------------------------------------\n");
 
-            node1.end();
-            node2.end();
+            
     },
 
     // Case Three:  WRITE and WRITE
     getCaseThreeResult: async function(req, res){
         const isolevel = req.body.isolevel;
-        const node1check = req.body.checknodeone;
-        const node2check = req.body.checknodetwo;
-        const node3check = req.body.checknodethree;
+        const node1check = req.body.c3checknodeone;
+        const node2check = req.body.c3checknodetwo;
+        const node3check = req.body.c3checknodethree;
         
         console.log("isoLevel = " + isolevel);
 
@@ -909,13 +911,14 @@ const inputController = {
 
             console.log("");
             //console.log(req.body.select);
+            node1.end();
+            node2.end();
+            node3.end();
             res.redirect('/')
 
             console.log("--------------------------------------------------------------------------\n");
 
-            node1.end();
-            node2.end();
-            node3.end();
+            
 
     },
 
