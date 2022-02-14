@@ -201,6 +201,23 @@ $(function(){
             inputNode1.setAttribute('value', '0');
         }
 
+        if(checktwo)
+        {        
+            inputNode2.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode2.setAttribute('value', '0');
+        }
+
+        if(checkthree)
+        {        
+            inputNode3.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode3.setAttribute('value', '0');
+        }
   
     });
 
