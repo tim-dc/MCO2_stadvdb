@@ -992,10 +992,10 @@ const inputController = {
 
         if(node3check == '1')
         {
-            const node2Status = node2.connect(function(err) {
+            const node3Status = node3.connect(function(err) {
             });
             try {
-                if(node2Status != null)
+                if(node3Status != null)
                 {
                     console.log('    Node3 is Active.');
                 }else console.log('    Node3 is OFFLINE.');
@@ -1062,47 +1062,60 @@ const inputController = {
         console.log("movie_year: " + movie_year_t1 + "\n");
 
         // Transaction Start (NODE 1)
-        await node1.beginTransaction();
 
-        try{
-            // SQL Statement 1
-            const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
-            });
+        if(node1check == '1'){
+            await node1.beginTransaction();
 
-            const data2 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
-            });
-
-            const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
-            });
-            
-            console.log(data[0].info);
-
-            if(data2[0] != data3[0]) {
-                await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+            try{
+                // SQL Statement 1
+                const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                 });
+
+                const data2 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                });
+
+                if(node1check == node2check){
+                    const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                    });
+
+                    if(data2[0] != data3[0]) {
+                        await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                        });
+                    }
+                }
+
+                if(node2check != '1')
+                {
+                    throw `Node 2 is offline, Transaction cannot be committed.`;
+                }
+              
+                
+                console.log(data[0].info);
+
+               
+
+                // Commit to confirm Transaction
+                await node1.commit();
+                console.log("Transaction Complete");
+            }catch (err) {
+                // Roll back Portion
+                console.error(`Error Occured : ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                return `Error selecting data`;
             }
+        }else console.log("STOPP");
 
-            // Commit to confirm Transaction
-            await node1.commit();
-            console.log("Transaction Complete");
-        }catch (err) {
-            // Roll back Portion
-            console.error(`Error Occured : ${err.message}`, err);
-            node1.rollback();
-            console.info('Rollback successful');
-            return `Error selecting data`;
-        }
+        console.log("");
+        //console.log(req.body.select);
+        
 
-            console.log("");
-            //console.log(req.body.select);
-           
+        console.log("--------------------------------------------------------------------------\n");
 
-            console.log("--------------------------------------------------------------------------\n");
-
-            node1.end();
-            node2.end();
-            node3.end(); 
-            res.redirect('/')
+        node1.end();
+        node2.end();
+        node3.end(); 
+        res.redirect('/')
     },
 
     getTestFive: function(req, res){
