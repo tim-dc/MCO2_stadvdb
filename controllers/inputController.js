@@ -1158,7 +1158,11 @@ const inputController = {
         res.redirect('/')
     },
 
-    getTestFive: function(req, res){
+    getCaseFiveResult: function(req, res){
+        
+    },
+
+    getCaseSixeResult: function(req, res){
         
     },
 
