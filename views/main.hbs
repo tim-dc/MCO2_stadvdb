@@ -120,6 +120,88 @@
 
          <div class="container bgc4 p-3 rounded-3 mt-3" >
             <h4 > Case #1: Transaction failure in writing to central node when attempting to replicate the transaction from Node 1 or Node 2 </h4>
+        <div> 
+
+            <div class="flexdiv"> 
+                
+                <div class="margin1rem container flexchild" id="node1-container">
+                    <h4 class=""> Case 1 </h4c>
+
+                    <div class="margin1rem">
+                        <form method="POST" action="caseone">
+                            <input name="isolevel" id="iso-level-one" type="hidden" />
+                            <input name="checknodeone" id="check-node-one" type="hidden" />
+                            <input name="checknodetwo" id="check-node-two" type="hidden" />
+                            <input name="checknodethree" id="check-node-three" type="hidden" />
+                            <button type="submit" class="caseOneBtn" id="run-case1"> Run </button>
+                        </form>  
+                    </div>
+                </div>
+    
+                <div class="margin1rem container flexchild" id="node2-container">
+                    <h4 class=""> Case 2 </h4>
+                    <div class="margin1rem">
+                        <form method="POST" action="casetwo">
+                            <input name="isolevel" id="iso-level-two" type="hidden"/>
+                            <input name="checknodeone" id="check-node-one" type="hidden" />
+                            <input name="checknodetwo" id="check-node-two" type="hidden" />
+                            <input name="checknodethree" id="check-node-three" type="hidden" />
+                            <button class="caseTwoBtn" id="run-case2"> Run </button>
+                        </form>  
+                        <form method="POST" action="resetcasetwothree">
+                            <button> Reset</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="margin1rem container flexchild" id="node3-container">
+                    <h4 class="">  Case 3 </h4>
+
+                    <div class="margin1rem">
+                        <form method="POST" action="casethree">
+                            <input name="isolevel" id="iso-level-three" type="hidden"/>
+                            <input name="checknodeone" id="check-node-one" type="hidden" />
+                            <input name="checknodetwo" id="check-node-two" type="hidden" />
+                            <input name="checknodethree" id="check-node-three" type="hidden" />
+                            <button class="caseThreeBtn" id="run-case3"> Run </button>
+                        </form>  
+
+                        <form method="POST" action="resetcasetwothree">
+                            <button> Reset</button>
+                        </form>
+
+
+                    </div>
+                </div>
+                    
+            </div> 
+
+            <div class="flexdiv"> 
+                
+                <div class="margin1rem container flexchild" id="node4-container">
+                    <h4 class=""> Case 4 </h4c>
+
+                    <div class="margin1rem">
+                        <form method="POST" action="casefour">
+                            <button class="caseFourBtn" id="run-case4"> Run </button>
+                        </form>  
+
+                       
+                        <form method="POST">
+                            <button> Reset</button>
+                        </form>  
+                    
+                    </div>
+
+                  
+                </div>
+    
+                <div class="margin1rem container flexchild" id="node5-container">
+                    <h4 class=""> Case 5 </h4>
+                    <div class="margin1rem">
+                        <form method="POST" action="casefive">
+                            <button class="caseFiveBtn" id="run-case5"> Run </button>
+                        </form>  
 
             <div class="container d-flex flex-row">
                 <form method="POST" action="casefour">
