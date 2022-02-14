@@ -111,77 +111,81 @@
         </div>
     </div>
 
+
+    <div class="container-fluid p-3">
+
+        <div class="container-fluid">
+            <h3>Step 3: Global Failure Recovery </h3>
+        </div>
+
+         <div class="container bgc4 p-3 rounded-3 mt-3" >
+            <h4 > Case #1: Transaction failure in writing to central node when attempting to replicate the transaction from Node 1 or Node 2 </h4>
+
+            <div class="container d-flex flex-row">
+                <form method="POST" action="casefour">
+                    <button class="caseFourBtn me-2" id="run-case4"> Run </button>
+                </form>  
+                <form method="POST">
+                    <button>Reset</button>
+                </form>  
+            </div>
+        </div>
+
+         <div class="container bgc4 p-3 rounded-3 mt-3">
+            <h4> Case #2: Transaction failure in writing to Node 2 and Node 3 when attempting to replicate the transaction from central node </h4>
+
+            
+            <div class="container d-flex flex-row">
+                <form method="POST" action="casefive">
+                    <button class="caseFiveBtn me-2" id="run-case5"> Run </button>
+                </form>  
+
+
+                <form method="POST" action="">
+                    <button> Reset</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="container bgc4 p-3 rounded-3 mt-3" >
+            <h4>Case #3: The central node is unavailable during the transaction and then eventually comes back online. </h4>
+
+            <div class="container d-flex flex-row">
+                <form method="POST" action="casesix">
+                    <button class="caseSixBtn me-2" id="run-case6"> Run </button>
+                </form>  
+
+                <form method="POST" action="">
+                    <button> Reset</button>
+                </form>
+
+
+            </div>
+        </div>
+                                    
+        <div class="container bgc4 p-3 rounded-3 mt-3" >
+            <h4 class="">Case #4: Node 2 or Node 3 is unavailable during the transaction and then eventually comes back online.</h4>
+
+            <div class="container d-flex flex-row">
+                <form method="POST" action="caseseven">
+                    <button class="caseSevenBtn me-2" id="run-case7"> Run </button>
+                </form>  
+
+                <form method="POST" action="">
+                    <button> Reset</button>
+                </form>
+
+
+            </div>
+        </div>
+
+    </div>
+
     
 
         
 
-            <div class="flexdiv"> 
-                
-                <div class="margin1rem container flexchild" id="node4-container">
-                    <h4 class=""> Case 4 </h4c>
-
-                    <div class="margin1rem">
-                        <form method="POST" action="casefour">
-                            <button class="caseFourBtn" id="run-case4"> Run </button>
-                        </form>  
-
-                       
-                        <form method="POST">
-                            <button> Reset</button>
-                        </form>  
-                    
-                    </div>
-
-                  
-                </div>
-    
-                <div class="margin1rem container flexchild" id="node5-container">
-                    <h4 class=""> Case 5 </h4>
-                    <div class="margin1rem">
-                        <form method="POST" action="casefive">
-                            <button class="caseFiveBtn" id="run-case5"> Run </button>
-                        </form>  
-
-
-                        <form method="POST" action="">
-                            <button> Reset</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="margin1rem container flexchild" id="node6-container">
-                    <h4 class="">  Case 6 </h4>
-
-                    <div class="margin1rem">
-                        <form method="POST" action="casesix">
-                            <button class="caseSixBtn" id="run-case6"> Run </button>
-                        </form>  
-
-                        <form method="POST" action="">
-                            <button> Reset</button>
-                        </form>
-
-
-                    </div>
-                </div>
-                                    
-                <div class="margin1rem container flexchild" id="node7-container">
-                    <h4 class="">  Case 7 </h4>
-
-                    <div class="margin1rem">
-                        <form method="POST" action="caseseven">
-                            <button class="caseSevenBtn" id="run-case7"> Run </button>
-                        </form>  
-
-                        <form method="POST" action="">
-                            <button> Reset</button>
-                        </form>
-
-
-                    </div>
-                </div>
-                    
-            </div> 
+        
 
 
     
