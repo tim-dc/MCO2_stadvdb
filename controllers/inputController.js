@@ -24,7 +24,7 @@ const inputController = {
     resetCaseTwoAndThree: async function (req,res){
         const movie_id = 6;  // (Can be edited)
         const movie_year = 1971  // (Can be edited)
-        const query2 = "UPDATE movies SET movie_year = 1971 WHERE movie_id = :x"
+        const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x"
         const node1check = req.body.checknodeone;
         const node2check = req.body.checknodetwo;
         const node3check = req.body.checknodethree;
@@ -97,7 +97,7 @@ const inputController = {
             // SQL Statement 1
             if(node1check == '1')
             {
-                const data = await node1.execute(query2, {x: movie_id}, (err,rows) => {
+                const data = await node1.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
                 });
                 
                 if(data[0].changedRows == 0)
@@ -109,7 +109,7 @@ const inputController = {
             
             if(node2check == '1')
             {
-                const data2 = await node2.execute(query2, {x: movie_id}, (err,rows) => {
+                const data2 = await node2.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
                 });
     
                 if(data2[0].changedRows == 0)
@@ -119,11 +119,9 @@ const inputController = {
 
             }
             
-            if(node1check == '1')
-            {
-                await node1.commit();
-                console.log("\nReset Complete\n");
-            }
+
+            await node1.commit();
+            console.log("\nReset Complete\n");
             // Commit to confirm Transaction
             // await node1.commit();
             // console.log("\nReset Complete\n");
@@ -359,7 +357,7 @@ const inputController = {
             //console.log(req.body.select);
         console.log("--------------------------------------------------------------------------\n");
 
-        await waitSleep(1000);
+        // await waitSleep(1000);
 
         console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
         console.log("SQL: " + query1 );
@@ -938,7 +936,9 @@ const inputController = {
 
     getCaseFourResult: async function(req,res) {
         const isolevel = req.body.isolevel;
-
+        const node1check = req.body.c2checknodeone;
+        const node2check = req.body.c2checknodetwo;
+        
         console.log("isoLevel = " + isolevel);
 
         // Transaction 1 Values
@@ -951,7 +951,7 @@ const inputController = {
 
         // Queries
         const query1 = "SELECT * FROM movies WHERE movie_id= :x"
-        const query2 = "UPDATE movies SET movie_year =  1982  WHERE movie_id = 8757";
+        const query2 = "UPDATE movies SET movie_year =  :y  WHERE movie_id = :x";
         
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
@@ -961,39 +961,44 @@ const inputController = {
 
         console.log("------ Node Status ------");
 
-        const node1Status = node1.connect(function(err) {
-        });
-        try {
-            if(node1Status != null)
-            {
-                console.log('    Node1 is Active.');
-            }else console.log('    Node1 is OFFLINE.');
-        }catch (error) {
-            return error;
-        }
-       
-        
-        const node2Status = node2.connect(function(err) {
-        });
-        try {
-            if(node2Status != null)
-            {
-                console.log('    Node2 is Active.');
-            }else console.log('    Node2 is OFFLINE.');
-        }catch (error) {
-            return error;
+        if(node1check == '1')
+        {
+            const node1Status = node1.connect(function(err) {
+            });
+            try {
+                if(node1Status != null)
+                {
+                    console.log('    Node1 is Active.');
+                }else console.log('    Node1 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
         }
 
-        const node3Status = node3.connect(function(err) {
-        });
-        try {
-            if(node3Status != null)
-            {
-                console.log('    Node2 is Active.');
-            }else console.log('    Node2 is OFFLINE.');
-        }catch (error) {
-            return error;
-        }
+        if(node2check == '1')
+        {
+            const node2Status = node2.connect(function(err) {
+            });
+            try {
+                if(node2Status != null)
+                {
+                    console.log('    Node2 is Active.');
+                }else console.log('    Node2 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        }  
+
+        // const node3Status = node3.connect(function(err) {
+        // });
+        // try {
+        //     if(node3Status != null)
+        //     {
+        //         console.log('    Node3 is Active.');
+        //     }else console.log('    Node3 is OFFLINE.');
+        // }catch (error) {
+        //     return error;
+        // }
        
         console.log("-------------------------");
 
@@ -1049,11 +1054,16 @@ const inputController = {
             const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
             });
 
+            const data2 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+            });
+
+            const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
+            });
             
             console.log(data[0].info);
 
             if(data2[0] != data3[0]) {
-                await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                 });
             }
 
@@ -1062,7 +1072,7 @@ const inputController = {
             console.log("Transaction Complete");
         }catch (err) {
             // Roll back Portion
-            console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
+            console.error(`Error Occured : ${err.message}`, err);
             node1.rollback();
             console.info('Rollback successful');
             return `Error selecting data`;
@@ -1070,16 +1080,14 @@ const inputController = {
 
             console.log("");
             //console.log(req.body.select);
-            res.redirect('/')
+           
 
             console.log("--------------------------------------------------------------------------\n");
 
             node1.end();
             node2.end();
-            node3.end();
-
-
-        res.redirect('/');
+            node3.end(); 
+            res.redirect('/')
     },
 
     getTestFive: function(req, res){
