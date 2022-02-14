@@ -4,32 +4,33 @@ Medium Blue - #547296
 Dark Blue   - #0B132B
 */
 
+:root{
+    --lblue:#889eb9;
+    --mblue:#547296 ;
+    --dblue:#0B132B;
+    --flesh: rgb(219, 199, 173)
+}
+
+.bgc1{
+   background-color: var(--lblue); 
+}
+
+.bgc2{
+    background-color: var(--mblue); 
+ }
+
+ .bgc3{
+    background-color: var(--dblue); 
+ }
+
+ .bgc4{
+     background-color:var(--flesh)
+ }
+
 body {
     background-color: #889eb9;
     height: auto;
     width: auto;
-}
-
-.container {
-    width: auto;
-    height: 100px;
-}
-
-.header3rem {
-    font-size: 3rem
-}
-
-.header2rem{
-    font-size: 2rem;
-}
-
-.flexdiv {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.flexchild {
-    flex-grow: 1;
 }
 
 .flexchild_2row {
@@ -69,43 +70,5 @@ body {
     padding-bottom: 2rem;
 }
 
-#node1-container {
-    background-color: rgb(219, 199, 173);
-    width: 100%;
-}
-
-#node2-container {
-    background-color: rgb(219, 199, 173);
-    width: 100%;
-}
-
-#node3-container {
-    background-color: rgb(219, 199, 173);
-    width: 100%;
-}
 
 
-#node4-container {
-    background-color: rgba(219, 199, 173, 0.671);
-    width: 100%;
-}
-
-#node5-container {
-    background-color: rgba(219, 199, 173, 0.671);
-    width: 100%;
-}
-
-#node6-container {
-    background-color: rgba(219, 199, 173, 0.671);
-    width: 100%;
-}
-
-#node7-container {
-    background-color: rgba(219, 199, 173, 0.671);
-    width: 100%;
-}
-
-#controls {
-    background-color: #527ec0;
-    border-radius: 10px;
-}

@@ -2,110 +2,118 @@
 <html lang="en">
     <head>
         <title></title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="/js/index.js"></script>
-        <script src="/js/importSQL.js" type="text/javascript"></script>
-        <script src="/js/jquery.appear.js"></script>  
-        <script src="/js/jquery-2.2.3.js" type="text/javascript"></script>
+        
         <link rel="stylesheet" href="/css/index.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     </head>
-<body>
+<body style="font-family: 'Arvo', serif;">  
+        
+    <div class="container-fluid p-3 bgc2">
+        <h1>STADVDB MCO2 Web Application</h1>
+    </div>
 
-    <div>
-        <div>
-            <!-- TITLE -->
-            <div class="header3rem">
-                STADVDB MCO2 Web Application
-            </div>
+    <div class="container-fluid d-flex flex-row p-3 bgc1 align-items-center " id="controls">
+        <div class="container">
+            <form method="POST">
+                <h4>Enable Node 1</h4>
+                <input class="form-check-input" type="checkbox" id="node1-switch" name="nodeone" value="0">
+            </form>
+        </div>
+            
+        <div class="container">
+            <form method="POST">
+                <h4>Enable Node 2</h4>
+                <input class="form-check-input" type="checkbox" id="node2-switch" name="nodetwo" value="0">
+            </form>
+        </div>       
 
-            <div class="flexdiv margin1rem" id="controls">
-                <div class="item-margin1rem">
-                    <form method="POST">
-                        <h4>Enable Node 1</h4>
-                        <input class="form-check-input" type="checkbox" id="node1-switch" name="nodeone" value="0">
-                    </form>
-                </div>
-                    
-                <div class="item-margin1rem">
-                    <form method="POST">
-                        <h4>Enable Node 2</h4>
-                        <input class="form-check-input" type="checkbox" id="node2-switch" name="nodetwo" value="0">
-                    </form>
-                </div>       
-    
-                <div class="item-margin1rem">
-                    <form method="POST">
-                        <h4>Enable Node 3</h4>
-                        <input class="form-check-input" type="checkbox" id="node3-switch" name="nodethree" value="0">
-                    </form>
-                    
-                </div>
-
-                <div class="margin1rem">
-                    <form method="POST">
-                        <select class="form-select" id="isolation-level" name="select">
-                            <option value="1"Selected> Read Uncommitted </option>
-                            <option value="2"> Read Committed </option>
-                            <option value="3"> Read Repeatable </option>
-                            <option value="4"> Serializable </option>
-                        </select>
-                    </form>
-                </div>  
-
-            </div>
-
+        <div class="container">
+            <h4>Enable Node 3</h4>
+            <form method="POST">
+                <input class="form-check-input" type="checkbox" id="node3-switch" name="nodethree" value="0">
+            </form>
+            
         </div>
 
-        <div> 
+        <div class="container">
+            <h5>Isolation Level</h5>
+            <form method="POST">
+                <select class="form-select" id="isolation-level" name="select">
+                    <option value="1"Selected> Read Uncommitted </option>
+                    <option value="2"> Read Committed </option>
+                    <option value="3"> Read Repeatable </option>
+                    <option value="4"> Serializable </option>
+                </select>
+            </form>
+        </div>  
 
-            <div class="flexdiv"> 
-                
-                <div class="margin1rem container flexchild" id="node1-container">
-                    <h4 class=""> Case 1 </h4c>
+    </div>
 
-                    <div class="margin1rem">
-                        <form method="POST" action="caseone">
-                            <input name="isolevel" id="iso-level-one" type="hidden" />
-                            <input name="checknodeone" id="check-node-one" type="hidden" />
-                            <input name="checknodetwo" id="check-node-two" type="hidden" />
-                            <input name="checknodethree" id="check-node-three" type="hidden" />
-                            <button type="submit" class="caseOneBtn" id="run-case1"> Run </button>
-                        </form>  
-                    </div>
-                </div>
+    <div class="container-fluid p-3">
+
+        <div class="container-fluid">
+            <h3>Step 2: Concurrency Control and Consistency </h3>
+        </div>
+
+        <div class="container bgc4 p-3 rounded-3 mt-3">
+         
+           <div class="container">
+                <h4> Case #1: All transactions are reading.  </h4>
+                <h5 class="ms-4">Transaction 1: </h5>
+                <h5 class="ms-4">Transaction 2: </h5>
+                <form method="POST" action="caseone">
+                    <input name="isolevel" id="iso-level-one" type="hidden" />
+                    <input name="checknodeone" id="check-node-one" type="hidden" />
+                    <input name="checknodetwo" id="check-node-two" type="hidden" />
+                    <input name="checknodethree" id="check-node-three" type="hidden" />
+                    <button type="submit" class="caseOneBtn" id="run-case1"> Run </button>
+                </form>  
+           </div>
+        </div>
+
+        <div class="container bgc4 p-3 rounded-3 mt-3">
+            <h4> Case #2: At least one transaction is writing (update / deletion) and the others are reading.</h4>
+            <h5 class="ms-4">Transaction 1: </h5>
+            <h5 class="ms-4">Transaction 2: </h5>
+
+            <div class="d-flex flex-row">
+                <form method="POST" action="casetwo">
+                    <input name="isolevel" id="iso-level-two" type="hidden"/>
+                    <button class="caseTwoBtn me-2" id="run-case2"> Run </button>
+                </form>  
+                <form method="POST" action="resetcasetwothree">
+                    <button> Reset</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="container bgc4 p-3 rounded-3 mt-3">
+            <h4>  Case #3: All transactions are writing (update / deletion). </h4>
+            <h5 class="ms-4">Transaction 1: </h5>
+            <h5 class="ms-4">Transaction 2: </h5>
+
+            <div class="d-flex flex-row">
+                <form method="POST" action="casethree">
+                    <input name="isolevel" id="iso-level-three" type="hidden"/>
+                    <button class="caseThreeBtn me-2" id="run-case3"> Run </button>
+                </form>  
+
+                <form method="POST" action="resetcasetwothree">
+                    <button> Reset</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
     
-                <div class="margin1rem container flexchild" id="node2-container">
-                    <h4 class=""> Case 2 </h4>
-                    <div class="margin1rem">
-                        <form method="POST" action="casetwo">
-                            <input name="isolevel" id="iso-level-two" type="hidden"/>
-                            <button class="caseTwoBtn" id="run-case2"> Run </button>
-                        </form>  
-                        <form method="POST" action="resetcasetwothree">
-                            <button> Reset</button>
-                        </form>
-                    </div>
-                </div>
 
-                <div class="margin1rem container flexchild" id="node3-container">
-                    <h4 class="">  Case 3 </h4>
-
-                    <div class="margin1rem">
-                        <form method="POST" action="casethree">
-                            <input name="isolevel" id="iso-level-three" type="hidden"/>
-                            <button class="caseThreeBtn" id="run-case3"> Run </button>
-                        </form>  
-
-                        <form method="POST" action="resetcasetwothree">
-                            <button> Reset</button>
-                        </form>
-
-
-                    </div>
-                </div>
-                    
-            </div> 
+        
 
             <div class="flexdiv"> 
                 
@@ -176,8 +184,13 @@
             </div> 
 
 
-        </div>
-    </div>
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/index.js"></script>
+    <script src="/js/importSQL.js" type="text/javascript"></script>
+    <script src="/js/jquery.appear.js"></script>  
+    <script src="/js/jquery-2.2.3.js" type="text/javascript"></script>
        
 </body>
 </html>
