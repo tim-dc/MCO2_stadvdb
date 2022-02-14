@@ -1149,11 +1149,13 @@ const inputController = {
         
     },
 
-    getCaseSixeResult: async function(req, res){
+    getCaseSixResult: async function(req, res){
         const isolevel = req.body.isolevel;
         const node1check = req.body.c6checknodeone;
         const node2check = req.body.c6checknodetwo;
         const node3check = req.body.c6checknodethree;
+        
+        var node1error = node1check;
         
         console.log("isoLevel = " + isolevel);
 
@@ -1266,7 +1268,10 @@ const inputController = {
         console.log("movie_year: " + movie_year_t1 + "\n");
 
         // Transaction Start (NODE 1)
-        if(node2check == '1'){
+        if(node2check == '1'  && node1check == '1')
+        {
+            node1error = 0;
+
             await node2.beginTransaction();
 
             try{
@@ -1277,7 +1282,7 @@ const inputController = {
                 const data2 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
                 });
 
-                if(node2check == node1check){
+                if(node2check == node1error){
                     const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                     });
 
@@ -1285,33 +1290,28 @@ const inputController = {
                         await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
                     }
-                }
-
-                if(node1check != '1')
-                {
+                }else {
                     console.log("Transaction in progress...");
+
                     await sleep(5000);
-                    
-                    const node1recheck = req.body.c6checknodeone;
-                    console.log(node1recheck);
-                    if(node1recheck != '1')
+
+                    node1error = node1check;
+
+                    if(node1error != '1')
                     {
                         throw `Transaction Timeout. Changes cannot be committed.`
                     }else {
                         const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                         });
-
+    
                         if(data2[0] != data3[0]) {
                             await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                             });
                         }
                     }
-                    console.log("Done!!");
                 }
-              
-                
+                         
                 console.log(data[0].info);
-
             
                 // Commit to confirm Transaction
                 await node2.commit();
@@ -1330,7 +1330,9 @@ const inputController = {
                 return `Error selecting data`;
             }
 
-        }else if(node3check == '1'){
+        }else if(node3check == '1' && node1check == '1'){
+            node1error = 0;
+
             await node3.beginTransaction();
 
             try{
@@ -1341,7 +1343,7 @@ const inputController = {
                 const data2 = await node3.execute(query1, {x:movie_id_t1}, (err,rows) => {
                 });
 
-                if(node3check == node1check){
+                if(node3check == node1error){
                     const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                     });
 
@@ -1349,25 +1351,297 @@ const inputController = {
                         await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
                     }
-                }
+                }else {
+                    console.log("Transaction in progress...");
 
-                if(node1check != '1')
-                {
-                    throw `Node 1 is offline, Transaction cannot be committed.`;
+                    await sleep(5000);
+
+                    node1error = node1check;
+
+                    if(node1error != '1')
+                    {
+                        throw `Transaction Timeout. Changes cannot be committed.`
+                    }else {
+                        const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                        });
+    
+                        if(data2[0] != data3[0]) {
+                            await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                            });
+                        }
+                    }
                 }
-              
-                
+                         
                 console.log(data[0].info);
-
             
                 // Commit to confirm Transaction
                 await node2.commit();
                 console.log("Transaction Complete");
+                node1.end();
+                node2.end();
+                node3.end(); 
             }catch (err) {
                 // Roll back Portion
                 console.error(`Error Occured : ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                node1.end();
+                node2.end();
+                node3.end(); 
+                return `Error selecting data`;
+            }
+        }
+
+        console.log("");
+        //console.log(req.body.select);
+        
+        console.log("--------------------------------------------------------------------------\n");
+
+        node1.end();
+        node2.end();
+        node3.end(); 
+        res.redirect('/')
+    },
+
+    getCaseSevenResult: async function(req,res) {
+        const isolevel = req.body.isolevel;
+        const node1check = req.body.c7checknodeone;
+        const node2check = req.body.c7checknodetwo;
+        const node3check = req.body.c7checknodethree;
+        
+        var node1error = node1check;
+        
+        console.log("isoLevel = " + isolevel);
+
+        // Transaction 1 Values
+        const movie_id_t1 = 6;  // (Can be edited)
+        const movie_year_t1 = 1975;  // (Can be edited)
+
+        // Transaction 2 Values
+        const movie_id_t2 = 6;  // (Can be edited)
+        const movie_year_t2 = 1971;  // (Can be edited)
+
+        // Queries
+        const query1 = "SELECT * FROM movies WHERE movie_id= :x"
+        const query2 = "UPDATE movies SET movie_year =  :y  WHERE movie_id = :x";
+        
+        // Connects to node 1
+        const node1 = await mysql.createConnection(config.db1);
+        const node2 = await mysql.createConnection(config.db2);
+        const node3 = await mysql.createConnection(config.db3);
+
+
+        console.log("------ Node Status ------");
+
+        if(node1check == '1')
+        {
+            const node1Status = node1.connect(function(err) {
+            });
+            try {
+                if(node1Status != null)
+                {
+                    console.log('    Node1 is Active.');
+                }else console.log('    Node1 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        }
+
+        if(node2check == '1')
+        {
+            const node2Status = node2.connect(function(err) {
+            });
+            try {
+                if(node2Status != null)
+                {
+                    console.log('    Node2 is Active.');
+                }else console.log('    Node2 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        }  
+
+        if(node3check == '1')
+        {
+            const node3Status = node3.connect(function(err) {
+            });
+            try {
+                if(node3Status != null)
+                {
+                    console.log('    Node3 is Active.');
+                }else console.log('    Node3 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        } 
+       
+        console.log("-------------------------");
+
+        // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
+        node1.config.namedPlaceholders = true;
+        node2.config.namedPlaceholders = true;
+        node3.config.namedPlaceholders = true;
+
+        
+        // Set Transaction Level (MUST BE FROM DROP DOWN)
+        console.log("\n------------  Isolation Level ------------");
+
+        if(isolevel == '1')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
+            console.log("             'READ UNCOMMITTED'");
+        }
+
+        if(isolevel == '2')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            console.log("             'READ COMMITTED'");
+        }
+
+        if(isolevel == '3')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+        }
+
+        if(isolevel == '4')
+        {
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+            console.log("             'SERIALIZABLE'");
+        }
+        
+        console.log("------------------------------------------");
+
+        console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        console.log("SQL: " + query2 );
+        console.log("movie_id: " + movie_id_t1 );
+        console.log("movie_year: " + movie_year_t1 + "\n");
+
+        // Transaction Start (NODE 1)
+        if(node2check == '1'  && node1check == '1')
+        {
+            node1error = 0;
+
+            await node2.beginTransaction();
+
+            try{
+                // SQL Statement 1
+                const data = await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                });
+
+                const data2 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                });
+
+                if(node2check == node1error){
+                    const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                    });
+
+                    if(data2[0] != data3[0]) {
+                        await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                        });
+                    }
+                }else {
+                    console.log("Transaction in progress...");
+
+                    await sleep(5000);
+
+                    node1error = node1check;
+
+                    if(node1error != '1')
+                    {
+                        throw `Transaction Timeout. Changes cannot be committed.`
+                    }else {
+                        const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                        });
+    
+                        if(data2[0] != data3[0]) {
+                            await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                            });
+                        }
+                    }
+                }
+                         
+                console.log(data[0].info);
+            
+                // Commit to confirm Transaction
+                await node2.commit();
+                console.log("Transaction Complete");
+                node1.end();
+                node2.end();
+                node3.end(); 
+            }catch (err) {
+                // Roll back Portion
+                console.error(`Error Occured : ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                node1.end();
+                node2.end();
+                node3.end(); 
+                return `Error selecting data`;
+            }
+
+        }else if(node3check == '1' && node1check == '1'){
+            node1error = 0;
+
+            await node3.beginTransaction();
+
+            try{
+                // SQL Statement 1
+                const data = await node3.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                });
+
+                const data2 = await node3.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                });
+
+                if(node3check == node1error){
+                    const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                    });
+
+                    if(data2[0] != data3[0]) {
+                        await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                        });
+                    }
+                }else {
+                    console.log("Transaction in progress...");
+
+                    await sleep(5000);
+
+                    node1error = node1check;
+
+                    if(node1error != '1')
+                    {
+                        throw `Transaction Timeout. Changes cannot be committed.`
+                    }else {
+                        const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                        });
+    
+                        if(data2[0] != data3[0]) {
+                            await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                            });
+                        }
+                    }
+                }
+                         
+                console.log(data[0].info);
+            
+                // Commit to confirm Transaction
+                await node2.commit();
+                console.log("Transaction Complete");
+                node1.end();
+                node2.end();
+                node3.end(); 
+            }catch (err) {
+                // Roll back Portion
+                console.error(`Error Occured : ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                node1.end();
+                node2.end();
+                node3.end(); 
                 return `Error selecting data`;
             }
         }
