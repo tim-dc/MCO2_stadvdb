@@ -1767,11 +1767,11 @@ const inputController = {
                     }
                 }else {
                     console.log("Transaction in progress...");
-
+                    // console.log(node2error)
                     await sleep(5000);
 
                     node2error = node2check;
-
+                    // console.log(node2error)
                     if(node2error != '1')
                     {
                         throw `Transaction Timeout. Changes cannot be committed.`
@@ -1828,11 +1828,11 @@ const inputController = {
                     }
                 }else {
                     console.log("Transaction in progress...");
-
+                    // console.log(node3error);
                     await sleep(5000);
 
                     node3error = node3check;
-
+                    // console.log(node3error);
                     if(node3error != '1')
                     {
                         throw `Transaction Timeout. Changes cannot be committed.`
