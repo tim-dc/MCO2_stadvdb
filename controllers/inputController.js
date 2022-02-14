@@ -3,6 +3,18 @@ const res = require('express/lib/response');
 const mysql = require('mysql2/promise');
 const config = require('../config/config'); // nodes
 
+async function waitSleep(ms) {
+    console.log(1);
+    await sleep(ms);
+    console.log(2);
+  }
+  
+function sleep(ms) {
+return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+});
+}
+
 const inputController = {
 
     getHomePage: function(req, res){
@@ -346,6 +358,8 @@ const inputController = {
             console.log("");
             //console.log(req.body.select);
         console.log("--------------------------------------------------------------------------\n");
+
+        await waitSleep(1000);
 
         console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
         console.log("SQL: " + query1 );
@@ -922,8 +936,6 @@ const inputController = {
 
     },
 
-   
-
     getCaseFourResult: async function(req,res) {
         const isolevel = req.body.isolevel;
 
@@ -939,9 +951,8 @@ const inputController = {
 
         // Queries
         const query1 = "SELECT * FROM movies WHERE movie_id= :x"
-        const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
+        const query2 = "UPDATE movies SET movie_year =  1982  WHERE movie_id = 8757";
         
-
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
@@ -1027,23 +1038,34 @@ const inputController = {
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
         console.log("SQL: " + query2 );
-        console.log("movie_id: " + movie_id_t2 );
-        console.log("movie_year: " + movie_year_t2 + "\n");
+        console.log("movie_id: " + movie_id_t1 );
+        console.log("movie_year: " + movie_year_t1 + "\n");
 
         // Transaction Start (NODE 1)
-        await node2.beginTransaction();
+        await node1.beginTransaction();
 
         try{
-           
-            console.log("Transaction Complete");
+            // SQL Statement 1
+            const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+            });
 
+            
+            console.log(data[0].info);
+
+            if(data2[0] != data3[0]) {
+                await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                });
+            }
+
+            // Commit to confirm Transaction
+            await node1.commit();
+            console.log("Transaction Complete");
         }catch (err) {
             // Roll back Portion
             console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
-            node2.rollback();
+            node1.rollback();
             console.info('Rollback successful');
             return `Error selecting data`;
-
         }
 
             console.log("");
