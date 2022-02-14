@@ -93,6 +93,8 @@ const inputController = {
     // Case one: READ ONLY
     getCaseOneResult: async function(req, res){
         const isolevel = req.body.isolevel;
+        const node1check = req.body.checknodeone;
+        const node2check = req.body.checknodetwo;
 
         console.log("isoLevel = " + isolevel);
 
@@ -106,28 +108,33 @@ const inputController = {
 
         console.log("------ Node Status ------");
 
-        const node1Status = node1.connect(function(err) {
-        });
-        try {
-            if(node1Status != null)
-            {
-                console.log('    Node1 is Active.');
-            }else console.log('    Node1 is OFFLINE.');
-        }catch (error) {
-            return error;
+        if(node1check == '1')
+        {
+            const node1Status = node1.connect(function(err) {
+            });
+            try {
+                if(node1Status != null)
+                {
+                    console.log('    Node1 is Active.');
+                }else console.log('    Node1 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
         }
-       
-        
-        const node2Status = node2.connect(function(err) {
-        });
-        try {
-            if(node2Status != null)
-            {
-                console.log('    Node2 is Active.');
-            }else console.log('    Node2 is OFFLINE.');
-        }catch (error) {
-            return error;
-        }
+
+        if(node2check == '1')
+        {
+            const node2Status = node2.connect(function(err) {
+            });
+            try {
+                if(node2Status != null)
+                {
+                    console.log('    Node2 is Active.');
+                }else console.log('    Node2 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        }    
        
         console.log("-------------------------");
 
