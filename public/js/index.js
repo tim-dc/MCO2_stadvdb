@@ -136,7 +136,47 @@ $(function(){
 
     });
 
+    $('#run-case4').on('click', function(){
+        isoLevel = $('#isolation-level').val();
+        var inputIso = document.getElementById("iso-level-four");
+        inputIso.setAttribute('value', isoLevel);
+        console.log("Running Case 4");
 
+        var checkone = document.querySelector('#node1-switch').checked;
+        var checktwo = document.querySelector('#node2-switch').checked;
+        var checkthree = document.querySelector('#node3-switch').checked;
+
+        var inputNode1 = document.getElementById("c4-check-node-one");
+        var inputNode2 = document.getElementById("c4-check-node-two");
+        var inputNode3 = document.getElementById("c4-check-node-three");
+
+        if(checkone)
+        {        
+            inputNode1.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode1.setAttribute('value', '0');
+        }
+
+        if(checktwo)
+        {        
+            inputNode2.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode2.setAttribute('value', '0');
+        }
+
+        if(checkthree)
+        {        
+            inputNode3.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode3.setAttribute('value', '0');
+        }
+    })
 
 
 })

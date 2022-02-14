@@ -936,8 +936,9 @@ const inputController = {
 
     getCaseFourResult: async function(req,res) {
         const isolevel = req.body.isolevel;
-        const node1check = req.body.c2checknodeone;
-        const node2check = req.body.c2checknodetwo;
+        const node1check = req.body.c4checknodeone;
+        const node2check = req.body.c4checknodetwo;
+        const node3check = req.body.c4checknodethree;
         
         console.log("isoLevel = " + isolevel);
 
@@ -988,6 +989,20 @@ const inputController = {
                 return error;
             }
         }  
+
+        if(node3check == '1')
+        {
+            const node2Status = node2.connect(function(err) {
+            });
+            try {
+                if(node2Status != null)
+                {
+                    console.log('    Node3 is Active.');
+                }else console.log('    Node3 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        } 
 
         // const node3Status = node3.connect(function(err) {
         // });
