@@ -366,7 +366,8 @@ const inputController = {
         const isolevel = req.body.isolevel;
         const node1check = req.body.checknodeone;
         const node2check = req.body.checknodetwo;
-
+        const node3check = req.body.checknodethree;
+        
         console.log("isoLevel = " + isolevel);
 
         const movie_id = 6;  // (Can be edited)
