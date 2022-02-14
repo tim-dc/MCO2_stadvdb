@@ -201,6 +201,32 @@ $(function(){
             inputNode1.setAttribute('value', '0');
         }
 
+  
+    });
+
+    $('#run-case6').on('click', function(){
+        isoLevel = $('#isolation-level').val();
+        var inputIso = document.getElementById("iso-level-six");
+        inputIso.setAttribute('value', isoLevel);
+        console.log("Running Case 6");
+
+        var checkone = document.querySelector('#node1-switch').checked;
+        var checktwo = document.querySelector('#node2-switch').checked;
+        var checkthree = document.querySelector('#node3-switch').checked;
+
+        var inputNode1 = document.getElementById("c6-check-node-one");
+        var inputNode2 = document.getElementById("c6-check-node-two");
+        var inputNode3 = document.getElementById("c6-check-node-three");
+
+        if(checkone)
+        {        
+            inputNode1.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode1.setAttribute('value', '0');
+        }
+
         if(checktwo)
         {        
             inputNode2.setAttribute('value', '1');
@@ -220,4 +246,45 @@ $(function(){
         }
     });
 
+    $('#run-case7').on('click', function(){
+        isoLevel = $('#isolation-level').val();
+        var inputIso = document.getElementById("iso-level-seven");
+        inputIso.setAttribute('value', isoLevel);
+        console.log("Running Case 7");
+
+        var checkone = document.querySelector('#node1-switch').checked;
+        var checktwo = document.querySelector('#node2-switch').checked;
+        var checkthree = document.querySelector('#node3-switch').checked;
+
+        var inputNode1 = document.getElementById("c7-check-node-one");
+        var inputNode2 = document.getElementById("c7-check-node-two");
+        var inputNode3 = document.getElementById("c7-check-node-three");
+
+        if(checkone)
+        {        
+            inputNode1.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode1.setAttribute('value', '0');
+        }
+
+        if(checktwo)
+        {        
+            inputNode2.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode2.setAttribute('value', '0');
+        }
+
+        if(checkthree)
+        {        
+            inputNode3.setAttribute('value', '1');
+        }
+        else
+        {
+            inputNode3.setAttribute('value', '0');
+        }
+    })
 })
