@@ -1093,7 +1093,6 @@ const inputController = {
                 console.log(data[0].info);
 
                
-
                 // Commit to confirm Transaction
                 await node1.commit();
                 console.log("Transaction Complete");
@@ -1104,7 +1103,48 @@ const inputController = {
                 console.info('Rollback successful');
                 return `Error selecting data`;
             }
-        }else console.log("STOPP");
+
+        }else if(node2check == '1'){
+            await node2.beginTransaction();
+
+            try{
+                // SQL Statement 1
+                const data = await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                });
+
+                const data2 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                });
+
+                if(node2check == node1check){
+                    const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
+                    });
+
+                    if(data2[0] != data3[0]) {
+                        await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+                        });
+                    }
+                }
+
+                if(node1check != '1')
+                {
+                    throw `Node 1 is offline, Transaction cannot be committed.`;
+                }
+              
+                
+                console.log(data[0].info);
+
+            
+                // Commit to confirm Transaction
+                await node2.commit();
+                console.log("Transaction Complete");
+            }catch (err) {
+                // Roll back Portion
+                console.error(`Error Occured : ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                return `Error selecting data`;
+            }
+        }
 
         console.log("");
         //console.log(req.body.select);
