@@ -2,6 +2,7 @@ const e = require('express');
 const res = require('express/lib/response');
 const mysql = require('mysql2/promise');
 const config = require('../config/config'); // nodes
+var versionExists = false;
 
 
 async function waitSleep(ms) {
@@ -17,8 +18,55 @@ return new Promise((resolve) => {
 
 const inputController = {
 
-    getHomePage: function(req, res){
+    getHomePage:function(req, res){
+      
         res.render('main');
+
+    },
+    createVersion: async function(req,res){
+
+        if(!versionExists){
+            const node1 = await mysql.createConnection(config.db1);
+            const node2 = await mysql.createConnection(config.db2);
+            const node3 = await mysql.createConnection(config.db3);
+    
+            const createVersionTable = "CREATE TABLE version (versionNo int);"
+            const insertVersionZero = "INSERT INTO version (versionNo) VALUES(0);"
+    
+            await node1.beginTransaction()
+            try{
+                    await node1.execute(createVersionTable,[], (err,rows)=>{});
+                    await node1.execute(insertVersionZero,[], (err, rows)=>{});
+                    await node1.commit();
+            }
+            catch(err){
+    
+            }
+    
+            await node2.beginTransaction()
+            try{
+                await node2.execute(createVersionTable,[], (err,rows)=>{});
+                await node2.execute(insertVersionZero,[], (err, rows)=>{});
+                await node2.commit();
+            }
+            catch(err){
+                
+            }
+    
+            await node3.beginTransaction()
+            try{
+                await node3.execute(createVersionTable,[], (err,rows)=>{});
+                await node3.execute(insertVersionZero,[], (err, rows)=>{});
+                await node3.commit();
+            }
+            catch(err){
+                
+            }
+            console.log("Version Tables created");
+            versionExists = true;
+        }
+        res.redirect('/index');
+        
     },
 
     resetCaseTwoAndThree: async function (req,res){
@@ -440,7 +488,7 @@ const inputController = {
         node1.end();
         node2.end();
         node3.end();
-        res.redirect('/')
+        res.redirect('/versionControl');
 
         console.log("--------------------------------------------------------------------------\n");
     },
@@ -754,7 +802,7 @@ const inputController = {
             //console.log(req.body.select);
             node1.end();
             node2.end();
-            res.redirect('/')
+            res.redirect('/versionControl');
 
             console.log("--------------------------------------------------------------------------\n");
 
@@ -1094,7 +1142,7 @@ const inputController = {
             node1.end();
             node2.end();
             node3.end();
-            res.redirect('/')
+            res.redirect('/versionControl');
 
             console.log("--------------------------------------------------------------------------\n");
 
@@ -2023,6 +2071,14 @@ const inputController = {
         node3.end(); 
         res.redirect('/')
     },
+    
+    versionControl: async function(req, res){
+        console.log("Redirect Success");
+
+
+        
+        res.redirect('/');
+    }
 
 }
 
