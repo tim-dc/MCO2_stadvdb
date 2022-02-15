@@ -158,10 +158,6 @@ const inputController = {
 
         console.log("isoLevel = " + isolevel);
 
-        const movie_id = 6;  // (Can be edited)
-        const movie_year = 1975  // (Can be edited)
-        const query1 = "SELECT * FROM movies WHERE movie_id= :x"
-
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
@@ -434,20 +430,19 @@ const inputController = {
         // }
 
         // Transaction Start (NODE 1)
-        
 
         
-            console.log("");
-            //console.log(req.body.select);
-            node1.end();
-            node2.end();
-            node3.end();
-            res.redirect('/')
+        
 
-            console.log("--------------------------------------------------------------------------\n");
+        //After ng bawat transaction dapat meron version number na nagccheck kung consistent ung data sa lahat ng db instances
+        console.log("");
+        //console.log(req.body.select);
+        node1.end();
+        node2.end();
+        node3.end();
+        res.redirect('/')
 
-            
-
+        console.log("--------------------------------------------------------------------------\n");
     },
 
     // Case Two: READ and WRITE
@@ -459,10 +454,10 @@ const inputController = {
         
         console.log("isoLevel = " + isolevel);
 
-        const movie_id = 6;  // (Can be edited)
-        const movie_year = 1975;  // (Can be edited)
-        const query1 = "SELECT * FROM movies WHERE movie_id= :x";
-        const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
+        // const movie_id = 6;  // (Can be edited)
+        // const movie_year = 1975;  // (Can be edited)
+        // const query1 = "SELECT * FROM movies WHERE movie_id= :x";
+        // const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
 
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
@@ -499,6 +494,19 @@ const inputController = {
                 return error;
             }
         }  
+        if(node3check == '1')
+        {
+            const node3Status = node3.connect(function(err) {
+            });
+            try {
+                if(node3Status != null)
+                {
+                    console.log('    Node3 is Active.');
+                }else console.log('    Node3 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        }
         console.log("-------------------------");
 
         // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
@@ -604,88 +612,141 @@ const inputController = {
         }
         console.log("------------------------------------------");
 
-        console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
-        console.log("SQL: " + query1 );
-        console.log("movie_id: " + movie_id );
+        console.log("\n-------------------- Transaction #1 --------------------");
+        console.log("Request: I want to see this movie again. (Movie Id: 262093");
 
-
-        if(node1check == '1')
-        {
+        const c2t1 = "SELECT * from movies WHERE movie_id = ?;"
+        if(node1check == '1'){
             await node1.beginTransaction();
-
             try{
-                // SQL Statement 1
-                const data = await node1.execute( query1, {x: movie_id}, (err,rows) => {
-                });
-                
-                console.log(data[0]);
-    
-                // Commit to confirm Transaction
+                const c2trans1 = await node1.execute(c2t1, [262093], (err,rows)=>{});
+
+                console.log(c2trans1[0]);
+
                 await node1.commit();
                 console.log("Transaction Complete");
-    
-            }catch (err) {
-                // Roll back Portion
+            }
+            catch(err){
+
                 console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
                 return `Error selecting data`;
-    
             }
         }
-        // Transaction Start (NODE 1)
+        
+        console.log("\n-------------------- Transaction #2 --------------------");
+        console.log("Request: I don't think this was the title of this movie. (Name change: Power Rangers Time Force: Temporal Anomaly");
+
+        const c2t2_1 = "SELECT * from movies WHERE movie_id = ?;"
+        const c2t2_2 = "UPDATE movies SET movie_name = ? WHERE movie_id = ?;"
+        const c2t2_3 = "SELECT * from movies WHERE movie_id = ?;"
+        if(node1check == '1'){
+            await node1.beginTransaction();
+            try{
+
+                const c2trans2_1 = await node1.execute(c2t2_1, [262095], (err,rows)=>{});
+                console.log("[Old Title]\n");
+                console.log(c2trans2_1[0]);
+
+                const c2trans2_2 = await node1.execute(c2t2_2,['Power Rangers Time Force: Temporal Anomaly', 262095],  (err,rows)=>{});
+                console.log(c2trans2_2[0]);
+
+                const c2trans2_3 = await node1.execute(c2t2_3, [262095], (err,rows)=>{});
+                console.log("[New Title]\n");
+                console.log(c2trans2_3[0]);
+
+                await node1.commit();
+                console.log("Transaction Complete");
+            }
+            catch(err){
+
+                console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                return `Error selecting data`;
+            }
+        }
+    
+
+
+        // if(node1check == '1')
+        // {
+        //     await node1.beginTransaction();
+
+        //     try{
+        //         // SQL Statement 1
+        //         const data = await node1.execute( query1, {x: movie_id}, (err,rows) => {
+        //         });
+                
+        //         console.log(data[0]);
+    
+        //         // Commit to confirm Transaction
+        //         await node1.commit();
+        //         console.log("Transaction Complete");
+    
+        //     }catch (err) {
+        //         // Roll back Portion
+        //         console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+        //         node1.rollback();
+        //         console.info('Rollback successful');
+        //         return `Error selecting data`;
+    
+        //     }
+        // }
+        // // Transaction Start (NODE 1)
         
 
     
-            console.log("");
-            //console.log(req.body.select);
+        //     console.log("");
+        //     //console.log(req.body.select);
 
-        console.log("--------------------------------------------------------------------------\n");
+        // console.log("--------------------------------------------------------------------------\n");
 
-        console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
-        console.log("SQL: " + query2 );
-        console.log("movie_id: " + movie_id );
-        console.log("movie_year: " + movie_year + "\n");
+        // console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
+        // console.log("SQL: " + query2 );
+        // console.log("movie_id: " + movie_id );
+        // console.log("movie_year: " + movie_year + "\n");
 
-        if(node2check == '1')
-        {
-             // Transaction Start (NODE 1)
-            await node2.beginTransaction();
+        // if(node2check == '1')
+        // {
+        //      // Transaction Start (NODE 1)
+        //     await node2.beginTransaction();
 
-            try{
-                // SQL Statement 2
-                const data = await node2.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
-                });
+        //     try{
+        //         // SQL Statement 2
+        //         const data = await node2.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
+        //         });
                 
-                console.log(data[0].info);
+        //         console.log(data[0].info);
 
-                const data2 = await node2.execute(query1, {x: movie_id}, (err,rows) => {
-                });
-                // console.log(data2[0]);
+        //         const data2 = await node2.execute(query1, {x: movie_id}, (err,rows) => {
+        //         });
+        //         // console.log(data2[0]);
 
-                const data3 = await node1.execute(query1, {x: movie_id}, (err,rows) => {
-                });
-                // console.log(data3[0]);
+        //         const data3 = await node1.execute(query1, {x: movie_id}, (err,rows) => {
+        //         });
+        //         // console.log(data3[0]);
 
-                // COPY data Node 2 to Node 1
-                if(data2[0] != data3[0]) {
-                    await node1.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
-                    });
-                }
+        //         // COPY data Node 2 to Node 1
+        //         if(data2[0] != data3[0]) {
+        //             await node1.execute(query2, {x: movie_id, y: movie_year}, (err,rows) => {
+        //             });
+        //         }
 
-                // Commit to confirm Transaction
-                await node2.commit();
-                console.log("Transaction Complete");
+        //         // Commit to confirm Transaction
+        //         await node2.commit();
+        //         console.log("Transaction Complete");
 
-            }catch (err) {
-                // Roll back Portion
-                console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
-                node2.rollback();
-                console.info('Rollback successful');
-                return `Error selecting data`;
+        //     }catch (err) {
+        //         // Roll back Portion
+        //         console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
+        //         node2.rollback();
+        //         console.info('Rollback successful');
+        //         return `Error selecting data`;
 
-            }
-        }
+        //     }
+        // }
 
        
 
@@ -709,17 +770,17 @@ const inputController = {
         
         console.log("isoLevel = " + isolevel);
 
-        // Transaction 1 Values
-        const movie_id_t1 = 6;  // (Can be edited)
-        const movie_year_t1 = 1975;  // (Can be edited)
+        // // Transaction 1 Values
+        // const movie_id_t1 = 6;  // (Can be edited)
+        // const movie_year_t1 = 1975;  // (Can be edited)
 
-        // Transaction 2 Values
-        const movie_id_t2 = 6;  // (Can be edited)
-        const movie_year_t2 = 1971;  // (Can be edited)
+        // // Transaction 2 Values
+        // const movie_id_t2 = 6;  // (Can be edited)
+        // const movie_year_t2 = 1971;  // (Can be edited)
 
-        // Queries
-        const query1 = "SELECT * FROM movies WHERE movie_id= :x"
-        const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
+        // // Queries
+        // const query1 = "SELECT * FROM movies WHERE movie_id= :x"
+        // const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
         
 
         // Connects to node 1
@@ -759,6 +820,19 @@ const inputController = {
                 return error;
             }
         }  
+        if(node3check == '1')
+        {
+            const node3Status = node3.connect(function(err) {
+            });
+            try {
+                if(node3Status != null)
+                {
+                    console.log('    Node3 is Active.');
+                }else console.log('    Node3 is OFFLINE.');
+            }catch (error) {
+                return error;
+            }
+        }  
        
         console.log("-------------------------");
 
@@ -867,102 +941,152 @@ const inputController = {
         
         console.log("------------------------------------------");
 
-        console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
-        console.log("SQL: " + query2 );
-        console.log("movie_id: " + movie_id_t1 );
-        console.log("movie_year: " + movie_year_t1  + "\n");
+        console.log("\n-------------------- Transaction #1 --------------------");
+        console.log("Request: I don’t think this movie exists (Movie ID: 8855)");
 
-        if(node1check == '1')
-        {
-            // Transaction Start (NODE 1)
+        const c3t1 = "DELETE from movies WHERE movie_id = ?;"
+
+        if(node1check == '1'){
             await node1.beginTransaction();
-
             try{
-                // SQL Statement 1
-                const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
-                });
-                
-                console.log(data[0].info);
+                const c3trans1 = await node1.execute(c3t1, [8855], (err,rows)=>{});
 
-                const data2 = await node1.execute(query1, {x: movie_id_t1}, (err,rows) => {
-                });
-                // console.log(data2[0]);
+                console.log(c3trans1[0]);
 
-                const data3 = await node2.execute(query1, {x: movie_id_t1}, (err,rows) => {
-                });
-                // console.log(data3[0]);
-
-                // COPY data Node 2 to Node 1
-                if(data2[0] != data3[0]) {
-                    await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
-                    });
-                }
-
-                // Commit to confirm Transaction
                 await node1.commit();
                 console.log("Transaction Complete");
+            }
+            catch(err){
 
-            }catch (err) {
-                // Roll back Portion
                 console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
                 return `Error selecting data`;
-
             }
-
         }
+
+
+
+        console.log("\n-------------------- Transaction #2 --------------------");
+        console.log("Request: This movie has a year correction (Movie ID: 4689, 1996 => 2000)");
+
+        const c3t2 = "UPDATE movies SET movie_year = ? WHERE movie_id = ?;"
+
+        if(node1check == '1'){
+            await node1.beginTransaction();
+            try{
+                const c3trans2 = await node1.execute(c3t2, [2000, 4689], (err,rows)=>{});
+
+                console.log(c3trans2[0]);
+
+                await node1.commit();
+                console.log("Transaction Complete");
+            }
+            catch(err){
+
+                console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                return `Error selecting data`;
+            }
+        }
+
+        // console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        // console.log("SQL: " + query2 );
+        // console.log("movie_id: " + movie_id_t1 );
+        // console.log("movie_year: " + movie_year_t1  + "\n");
+
+        // if(node1check == '1')
+        // {
+        //     // Transaction Start (NODE 1)
+        //     await node1.beginTransaction();
+
+        //     try{
+        //         // SQL Statement 1
+        //         const data = await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+        //         });
+                
+        //         console.log(data[0].info);
+
+        //         const data2 = await node1.execute(query1, {x: movie_id_t1}, (err,rows) => {
+        //         });
+        //         // console.log(data2[0]);
+
+        //         const data3 = await node2.execute(query1, {x: movie_id_t1}, (err,rows) => {
+        //         });
+        //         // console.log(data3[0]);
+
+        //         // COPY data Node 2 to Node 1
+        //         if(data2[0] != data3[0]) {
+        //             await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
+        //             });
+        //         }
+
+        //         // Commit to confirm Transaction
+        //         await node1.commit();
+        //         console.log("Transaction Complete");
+
+        //     }catch (err) {
+        //         // Roll back Portion
+        //         console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+        //         node1.rollback();
+        //         console.info('Rollback successful');
+        //         return `Error selecting data`;
+
+        //     }
+
+        // }
 
        
     
-            console.log("");
-            //console.log(req.body.select);
+        //     console.log("");
+        //     //console.log(req.body.select);
 
-        console.log("--------------------------------------------------------------------------\n");
+        // console.log("--------------------------------------------------------------------------\n");
 
-        console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
-        console.log("SQL: " + query2 );
-        console.log("movie_id: " + movie_id_t2 );
-        console.log("movie_year: " + movie_year_t2 + "\n");
+        // console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
+        // console.log("SQL: " + query2 );
+        // console.log("movie_id: " + movie_id_t2 );
+        // console.log("movie_year: " + movie_year_t2 + "\n");
 
-        if(node2check == '1')
-        {
-            // Transaction Start (NODE 1)
-            await node2.beginTransaction();
+        // if(node2check == '1')
+        // {
+        //     // Transaction Start (NODE 1)
+        //     await node2.beginTransaction();
 
-            try{
-                // SQL Statement 2
-                const data = await node2.execute(query2, {x: movie_id_t2, y: movie_year_t2}, (err,rows) => {
-                });
+        //     try{
+        //         // SQL Statement 2
+        //         const data = await node2.execute(query2, {x: movie_id_t2, y: movie_year_t2}, (err,rows) => {
+        //         });
                 
-                console.log(data[0].info);
+        //         console.log(data[0].info);
 
-                const data2 = await node2.execute(query1, {x: movie_id_t2}, (err,rows) => {
-                });
-                // console.log(data2[0]);
+        //         const data2 = await node2.execute(query1, {x: movie_id_t2}, (err,rows) => {
+        //         });
+        //         // console.log(data2[0]);
 
-                const data3 = await node1.execute(query1, {x: movie_id_t2}, (err,rows) => {
-                });
-                // console.log(data3[0]);
+        //         const data3 = await node1.execute(query1, {x: movie_id_t2}, (err,rows) => {
+        //         });
+        //         // console.log(data3[0]);
 
-                if(data2[0] != data3[0]) {
-                    await node1.execute(query2, {x: movie_id_t2, y: movie_year_t2}, (err,rows) => {
-                    });
-                }
+        //         if(data2[0] != data3[0]) {
+        //             await node1.execute(query2, {x: movie_id_t2, y: movie_year_t2}, (err,rows) => {
+        //             });
+        //         }
 
-                // Commit to confirm Transaction
-                await node2.commit();
-                console.log("Transaction Complete");
+        //         // Commit to confirm Transaction
+        //         await node2.commit();
+        //         console.log("Transaction Complete");
 
-            }catch (err) {
-                // Roll back Portion
-                console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
-                node2.rollback();
-                console.info('Rollback successful');
-                return `Error selecting data`;
+        //     }catch (err) {
+        //         // Roll back Portion
+        //         console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
+        //         node2.rollback();
+        //         console.info('Rollback successful');
+        //         return `Error selecting data`;
 
-            }
-        }
+        //     }
+        // }
         
 
             console.log("");
