@@ -2,7 +2,7 @@ const e = require('express');
 const res = require('express/lib/response');
 const mysql = require('mysql2/promise');
 const config = require('../config/config'); // nodes
-const serverController = require('./serverController');
+
 
 async function waitSleep(ms) {
     console.log(1);
@@ -316,25 +316,53 @@ const inputController = {
 
         console.log("\n-------------------- Transaction #1 --------------------");
         console.log("Request: What year did this movie come out? (Movie name: 10 minuta) ");
-        const c1t1 = "SELECT * from movies WHERE movie_name = '10 minuta' FOR SHARE;"
+        //movie_name = '10 minuta'
+        const c1t1 = "SELECT * from movies WHERE movie_name = ?;"
+        if(node1check == '1'){
+            await node1.beginTransaction();
+            try{
+                const c1trans1 = await node1.execute(c1t1, ['10 minuta'], (err,rows)=>{});
+
+                console.log(c1trans1[0]);
+
+                await node1.commit();
+                console.log("Transaction Complete");
+            }
+            catch(err){
+
+                console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                return `Error selecting data`;
+            }
+        }
 
         console.log("\n-------------------- Transaction #2 --------------------");
         console.log("Request: Give me all movies that were released between 1969-1971");
         //Inputs movie_year1 = 1966, movie_year2 = 1971
-        const c2t1 = "SELECT * from movies WHERE movie_year BETWEEN 1969 AND 1971;"
+        const c2t1 = "SELECT * from movies WHERE movie_year BETWEEN ? AND ?;"
+
+        if(node1check == '1'){
+            await node1.beginTransaction();
+            try{
+                const c1trans2 = await node1.execute(c2t1, [1969, 1971], (err,rows)=>{});
+
+                console.log(c1trans2[0]);
+
+                await node1.commit();
+                console.log("Transaction Complete");
+            }
+            catch(err){
+
+                console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+                node1.rollback();
+                console.info('Rollback successful');
+                return `Error selecting data`;
+            }
+        }
 
 
-        console.log("\n-------------------- Transaction #3 --------------------");
-        console.log("Request: Give me all movies that were released between 1999-2000");
-        //Inputs movie_year1 = 1999, movie_year2 = 2000
-        const c3t1 = "SELECT * from movies WHERE movie_year BETWEEN 1999 AND 2000;"
 
-
-        console.log("\n-------------------- Transaction #4 --------------------");
-        console.log("Request: What movies have been released in 1979-1981");
-        //Inputs movie_year1 = 1979, movie_year2 = 1981
-        const c4t1_1 = "SELECT * from movies WHERE movie_year = 1979;"
-        const c4t1_2 = "SELECT * from movies WHERE movie_year BETWEEN 1980 AND 1981;"
 
         // console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
         // console.log("SQL: " + query1 );
