@@ -64,6 +64,10 @@ const inputController = {
             }
             console.log("Version Tables created");
             versionExists = true;
+
+            node1.end();
+            node2.end();
+            node3.end();
         }
         res.redirect('/index');
         
