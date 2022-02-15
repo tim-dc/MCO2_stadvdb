@@ -708,16 +708,18 @@ const inputController = {
             try{
 
                 const c2trans2_1 = await node1.execute(c2t2_1, {x: movie_id}, (err,rows)=>{});
-                console.log("[Old Title]\n");
-                console.log(c2trans2_1[0]);
-
+ 
                 const c2trans2_2 = await node1.execute(c2t2_2,{x: movie_id, y: movie_name1},  (err,rows)=>{});
 
                 
                 if(c2trans2_2[0].changedRows == 0)
                 {
-                    console.log("Nothing New to add.");
+                    console.log("\nNothing New to add.");
                 }else {
+                    console.log("[Old Title]\n");
+                    console.log(c2trans2_1[0]);
+
+                    
                     console.log(data2[0].info);
 
                     console.log("\n");
@@ -844,8 +846,8 @@ const inputController = {
         console.log("isoLevel = " + isolevel);
 
         // Transaction 1 Values
-        const movie_id_t1 = 6;  // (Can be edited)
-        const movie_year_t1 = 8855;  // (Can be edited)
+        const movie_id_t1 = 8855;  // (Can be edited)
+        const movie_year_t1 = 6;  // (Can be edited)
 
         // Transaction 2 Values
         const movie_id_t2 = 4689;  // (Can be edited)
@@ -1022,11 +1024,11 @@ const inputController = {
         if(node1check == '1'){
             await node1.beginTransaction();
             try{
-                const c3trans1 = await node1.execute(c3t1, {x: movie_year_t1}, (err,rows)=>{});
+                const c3trans1 = await node1.execute(c3t1, {x: movie_id_t1}, (err,rows)=>{});
 
                 if(c3trans1[0].info == '')
                 {
-                    throw `This movie does not exist.`
+                    console.log( "\nThis movie id: " + movie_id_t1 +"  does not exist.\n");
                 }
                 
                 await node1.commit();
@@ -1051,12 +1053,12 @@ const inputController = {
             await node1.beginTransaction();
             try{
                 const c3trans2 = await node1.execute(c3t2, {x: movie_year_t2, y: movie_id_t2}, (err,rows)=>{});
-
+                console.log("\n");
                 console.log(c3trans2[0].info);
 
                 if(c3trans2[0].changedRows == 0)
                 {
-                    console.log("Nothing New to add.");
+                    console.log("Nothing New to add.\n");
                 }else {
                     console.log(c3trans2[0].info);
 
@@ -1067,7 +1069,7 @@ const inputController = {
                     
                 }
 
-                console.log(c3trans2[0]);
+                
                 await node1.commit();
                 console.log("Transaction Complete");
             }
