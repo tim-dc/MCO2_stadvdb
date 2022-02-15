@@ -663,8 +663,11 @@ const inputController = {
                 console.log("[Old Title]\n");
                 console.log(c2trans2_1[0]);
 
+                console.log("\n");
                 const c2trans2_2 = await node1.execute(c2t2_2,{x: movie_id, y: movie_name1},  (err,rows)=>{});
-                console.log(c2trans2_2[0]);
+                console.log(c2trans2_2[0].info);
+                console.log("\n");
+
 
                 const c2trans2_3 = await node1.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
                 console.log("[New Title]\n");
