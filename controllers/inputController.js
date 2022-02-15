@@ -2112,7 +2112,7 @@ const inputController = {
         node1.end();
         node2.end();
         node3.end(); 
-        res.redirect('/')
+        res.redirect('/index');
     },
     
     versionControl: async function(req, res){
@@ -2120,7 +2120,7 @@ const inputController = {
 
 
         
-        res.redirect('/');
+        res.redirect('/index');
     }
 
 }
