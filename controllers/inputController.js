@@ -2,6 +2,7 @@ const e = require('express');
 const res = require('express/lib/response');
 const mysql = require('mysql2/promise');
 const config = require('../config/config'); // nodes
+const serverController = require('./serverController');
 
 async function waitSleep(ms) {
     console.log(1);
@@ -195,11 +196,6 @@ const inputController = {
                 return error;
             }
         }    
-
-        if(node3check == '1')
-        {
-
-        }
        
         if(node3check == '1')
         {
@@ -317,76 +313,97 @@ const inputController = {
                 console.log("             'SERIALIZABLE'");
             }
         }
-        console.log("------------------------------------------");
 
-        console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
-        console.log("SQL: " + query1 );
-        console.log("movie_id: " + movie_id );
-        console.log("movie_year: " + movie_year + "\n");
+        console.log("\n-------------------- Transaction #1 --------------------");
+        console.log("Request: What year did this movie come out? (Movie name: 10 minuta) ");
+        const c1t1 = "SELECT * from movies WHERE movie_name = '10 minuta' FOR SHARE;"
+
+        console.log("\n-------------------- Transaction #2 --------------------");
+        console.log("Request: Give me all movies that were released between 1969-1971");
+        //Inputs movie_year1 = 1966, movie_year2 = 1971
+        const c2t1 = "SELECT * from movies WHERE movie_year BETWEEN 1969 AND 1971;"
 
 
-        // Transaction Start (NODE 1)
+        console.log("\n-------------------- Transaction #3 --------------------");
+        console.log("Request: Give me all movies that were released between 1999-2000");
+        //Inputs movie_year1 = 1999, movie_year2 = 2000
+        const c3t1 = "SELECT * from movies WHERE movie_year BETWEEN 1999 AND 2000;"
 
-        if(node1check == '1')
-        {
-            await node1.beginTransaction();
 
-            try{
-                // SQL Statement 1
-                const data = await node1.execute( query1, {x: movie_id}, (err,rows) => {
-                });
+        console.log("\n-------------------- Transaction #4 --------------------");
+        console.log("Request: What movies have been released in 1979-1981");
+        //Inputs movie_year1 = 1979, movie_year2 = 1981
+        const c4t1_1 = "SELECT * from movies WHERE movie_year = 1979;"
+        const c4t1_2 = "SELECT * from movies WHERE movie_year BETWEEN 1980 AND 1981;"
+
+        // console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        // console.log("SQL: " + query1 );
+        // console.log("movie_id: " + movie_id );
+        // console.log("movie_year: " + movie_year + "\n");
+
+
+        // // Transaction Start (NODE 1)
+
+        // if(node1check == '1')
+        // {
+        //     await node1.beginTransaction();
+
+        //     try{
+        //         // SQL Statement 1
+        //         const data = await node1.execute( query1, {x: movie_id}, (err,rows) => {
+        //         });
                 
-                console.log(data[0]);
+        //         console.log(data[0]);
     
-                // Commit to confirm Transaction
-                await node1.commit();
-                console.log("Transaction Complete");
+        //         // Commit to confirm Transaction
+        //         await node1.commit();
+        //         console.log("Transaction Complete");
     
-            }catch (err) {
-                // Roll back Portion
-                console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
-                node1.rollback();
-                console.info('Rollback successful');
-                return `Error selecting data`;
+        //     }catch (err) {
+        //         // Roll back Portion
+        //         console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+        //         node1.rollback();
+        //         console.info('Rollback successful');
+        //         return `Error selecting data`;
     
-            }
-        }
+        //     }
+        // }
                   
-            console.log("");
-            //console.log(req.body.select);
-        console.log("--------------------------------------------------------------------------\n");
+        //     console.log("");
+        //     //console.log(req.body.select);
+        // console.log("--------------------------------------------------------------------------\n");
 
-        // await waitSleep(1000);
+        // // await waitSleep(1000);
 
-        console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
-        console.log("SQL: " + query1 );
-        console.log("movie_id: " + movie_id );
-        console.log("movie_year: " + movie_year + "\n");
+        // console.log("\n-------------------- Transaction 2 Starts Here (Node 2) ------------------");
+        // console.log("SQL: " + query1 );
+        // console.log("movie_id: " + movie_id );
+        // console.log("movie_year: " + movie_year + "\n");
 
-        if(node2check == '1')
-        {
-            await node2.beginTransaction();
+        // if(node2check == '1')
+        // {
+        //     await node2.beginTransaction();
 
-            try{
-                // SQL Statement 1
-                const data = await node2.execute(query1, {x: movie_id}, (err,rows) => {
-                });
+        //     try{
+        //         // SQL Statement 1
+        //         const data = await node2.execute(query1, {x: movie_id}, (err,rows) => {
+        //         });
                 
-                console.log(data[0]);
+        //         console.log(data[0]);
     
-                // Commit to confirm Transaction
-                await node2.commit();
-                console.log("Transaction Complete");
+        //         // Commit to confirm Transaction
+        //         await node2.commit();
+        //         console.log("Transaction Complete");
     
-            }catch (err) {
-                // Roll back Portion
-                console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
-                node2.rollback();
-                console.info('Rollback successful');
-                return `Error selecting data`;
+        //     }catch (err) {
+        //         // Roll back Portion
+        //         console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+        //         node2.rollback();
+        //         console.info('Rollback successful');
+        //         return `Error selecting data`;
     
-            }
-        }
+        //     }
+        // }
 
         // Transaction Start (NODE 1)
         
