@@ -163,6 +163,17 @@ const inputController = {
         const node2 = await mysql.createConnection(config.db2);
         const node3 = await mysql.createConnection(config.db3);
 
+        // Transaction 1 Variables
+        const movie_name = '10 minuta';
+       
+        // Transaction 2 Variables
+        const movie_year1 = 1966;
+        const movie_year2 = 1971;
+
+        // Queries
+        const c1t1 = "SELECT * from movies WHERE movie_name = :x"
+        const c2t1 = "SELECT * from movies WHERE movie_year BETWEEN :x AND :y"
+        
         console.log("------ Node Status ------");
 
         if(node1check == '1')
@@ -312,12 +323,11 @@ const inputController = {
 
         console.log("\n-------------------- Transaction #1 --------------------");
         console.log("Request: What year did this movie come out? (Movie name: 10 minuta) ");
-        //movie_name = '10 minuta'
-        const c1t1 = "SELECT * from movies WHERE movie_name = ?;"
+  
         if(node1check == '1'){
             await node1.beginTransaction();
             try{
-                const c1trans1 = await node1.execute(c1t1, ['10 minuta'], (err,rows)=>{});
+                const c1trans1 = await node1.execute(c1t1, {x: movie_name}, (err,rows)=>{});
 
                 console.log(c1trans1[0]);
 
@@ -331,17 +341,16 @@ const inputController = {
                 console.info('Rollback successful');
                 return `Error selecting data`;
             }
-        }
+        } 
 
         console.log("\n-------------------- Transaction #2 --------------------");
         console.log("Request: Give me all movies that were released between 1969-1971");
-        //Inputs movie_year1 = 1966, movie_year2 = 1971
-        const c2t1 = "SELECT * from movies WHERE movie_year BETWEEN ? AND ?;"
+
 
         if(node1check == '1'){
             await node1.beginTransaction();
             try{
-                const c1trans2 = await node1.execute(c2t1, [1969, 1971], (err,rows)=>{});
+                const c1trans2 = await node1.execute(c2t1, {x: movie_year1, y: movie_year2}, (err,rows)=>{});
 
                 console.log(c1trans2[0]);
 
@@ -356,8 +365,6 @@ const inputController = {
                 return `Error selecting data`;
             }
         }
-
-
 
 
         // console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
@@ -454,7 +461,17 @@ const inputController = {
         
         console.log("isoLevel = " + isolevel);
 
-        // const movie_id = 6;  // (Can be edited)
+        // Transaction 1 & 2
+        const movie_id = 262093;  // (Can be edited)
+        const movie_name1 = 'Power Rangers Time Force: Temporal Anomaly';
+
+        // Queries
+        const c2t1 = "SELECT * from movies WHERE movie_id = :x"
+        const c2t2_1 = "SELECT * from movies WHERE movie_id = :x"
+        const c2t2_2 = "UPDATE movies SET movie_name = :y WHERE movie_id = :x"
+        const c2t2_3 = "SELECT * from movies WHERE movie_id = :x"
+
+
         // const movie_year = 1975;  // (Can be edited)
         // const query1 = "SELECT * FROM movies WHERE movie_id= :x";
         // const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
@@ -615,11 +632,11 @@ const inputController = {
         console.log("\n-------------------- Transaction #1 --------------------");
         console.log("Request: I want to see this movie again. (Movie Id: 262093");
 
-        const c2t1 = "SELECT * from movies WHERE movie_id = ?;"
+        
         if(node1check == '1'){
             await node1.beginTransaction();
             try{
-                const c2trans1 = await node1.execute(c2t1, [262093], (err,rows)=>{});
+                const c2trans1 = await node1.execute(c2t1, {x: movie_id}, (err,rows)=>{});
 
                 console.log(c2trans1[0]);
 
@@ -636,23 +653,20 @@ const inputController = {
         }
         
         console.log("\n-------------------- Transaction #2 --------------------");
-        console.log("Request: I don't think this was the title of this movie. (Name change: Power Rangers Time Force: Temporal Anomaly");
+        console.log("Request: I dont think this was the title of this movie. (Name change: Power Rangers Time Force: Temporal Anomaly");
 
-        const c2t2_1 = "SELECT * from movies WHERE movie_id = ?;"
-        const c2t2_2 = "UPDATE movies SET movie_name = ? WHERE movie_id = ?;"
-        const c2t2_3 = "SELECT * from movies WHERE movie_id = ?;"
         if(node1check == '1'){
             await node1.beginTransaction();
             try{
 
-                const c2trans2_1 = await node1.execute(c2t2_1, [262095], (err,rows)=>{});
+                const c2trans2_1 = await node1.execute(c2t2_1, {x: movie_id}, (err,rows)=>{});
                 console.log("[Old Title]\n");
                 console.log(c2trans2_1[0]);
 
-                const c2trans2_2 = await node1.execute(c2t2_2,['Power Rangers Time Force: Temporal Anomaly', 262095],  (err,rows)=>{});
+                const c2trans2_2 = await node1.execute(c2t2_2,{x: movie_id, y: movie_name1},  (err,rows)=>{});
                 console.log(c2trans2_2[0]);
 
-                const c2trans2_3 = await node1.execute(c2t2_3, [262095], (err,rows)=>{});
+                const c2trans2_3 = await node1.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
                 console.log("[New Title]\n");
                 console.log(c2trans2_3[0]);
 
@@ -770,15 +784,19 @@ const inputController = {
         
         console.log("isoLevel = " + isolevel);
 
-        // // Transaction 1 Values
-        // const movie_id_t1 = 6;  // (Can be edited)
-        // const movie_year_t1 = 1975;  // (Can be edited)
+        // Transaction 1 Values
+        const movie_id_t1 = 6;  // (Can be edited)
+        const movie_year_t1 = 8855;  // (Can be edited)
 
-        // // Transaction 2 Values
-        // const movie_id_t2 = 6;  // (Can be edited)
-        // const movie_year_t2 = 1971;  // (Can be edited)
+        // Transaction 2 Values
+        const movie_id_t2 = 6;  // (Can be edited)
+        const movie_year_t2 = 1971;  // (Can be edited)
 
-        // // Queries
+        // Queries
+        const c3t1 = "DELETE from movies WHERE movie_id = :x"
+        const c3t2 = "UPDATE movies SET movie_year = :x WHERE movie_id = :y"
+
+
         // const query1 = "SELECT * FROM movies WHERE movie_id= :x"
         // const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
         
@@ -791,8 +809,6 @@ const inputController = {
 
         console.log("------ Node Status ------");
 
-        const node1Status = node1.connect(function(err) {
-        });
         if(node1check == '1')
         {
             const node1Status = node1.connect(function(err) {
@@ -942,14 +958,13 @@ const inputController = {
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction #1 --------------------");
-        console.log("Request: I don’t think this movie exists (Movie ID: 8855)");
+        console.log("Request: I dont think this movie exists (Movie ID: 8855)");
 
-        const c3t1 = "DELETE from movies WHERE movie_id = ?;"
 
         if(node1check == '1'){
             await node1.beginTransaction();
             try{
-                const c3trans1 = await node1.execute(c3t1, [8855], (err,rows)=>{});
+                const c3trans1 = await node1.execute(c3t1, {x: movie_year_t1}, (err,rows)=>{});
 
                 console.log(c3trans1[0]);
 
@@ -970,12 +985,11 @@ const inputController = {
         console.log("\n-------------------- Transaction #2 --------------------");
         console.log("Request: This movie has a year correction (Movie ID: 4689, 1996 => 2000)");
 
-        const c3t2 = "UPDATE movies SET movie_year = ? WHERE movie_id = ?;"
 
         if(node1check == '1'){
             await node1.beginTransaction();
             try{
-                const c3trans2 = await node1.execute(c3t2, [2000, 4689], (err,rows)=>{});
+                const c3trans2 = await node1.execute(c3t2, {x: movie_year_t2, y: movie_id_t2}, (err,rows)=>{});
 
                 console.log(c3trans2[0]);
 
