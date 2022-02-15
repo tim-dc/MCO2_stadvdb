@@ -663,15 +663,23 @@ const inputController = {
                 console.log("[Old Title]\n");
                 console.log(c2trans2_1[0]);
 
-                console.log("\n");
                 const c2trans2_2 = await node1.execute(c2t2_2,{x: movie_id, y: movie_name1},  (err,rows)=>{});
-                console.log(c2trans2_2[0].info);
+
+                
+                if(c2trans2_2[0].changedRows == 0)
+                {
+                    console.log("Nothing New to add.");
+                }else {
+                    console.log(data2[0].info);
+
+                    console.log("\n");
+
+                    const c2trans2_3 = await node1.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
+                    console.log("[New Title]\n");
+                    console.log(c2trans2_3[0]);
+                }
+
                 console.log("\n");
-
-
-                const c2trans2_3 = await node1.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
-                console.log("[New Title]\n");
-                console.log(c2trans2_3[0]);
 
                 await node1.commit();
                 console.log("Transaction Complete");
@@ -792,15 +800,14 @@ const inputController = {
         const movie_year_t1 = 8855;  // (Can be edited)
 
         // Transaction 2 Values
-        const movie_id_t2 = 6;  // (Can be edited)
-        const movie_year_t2 = 1971;  // (Can be edited)
+        const movie_id_t2 = 4689;  // (Can be edited)
+        const movie_year_t2 = 2000;  // (Can be edited)
 
         // Queries
         const c3t1 = "DELETE from movies WHERE movie_id = :x"
         const c3t2 = "UPDATE movies SET movie_year = :x WHERE movie_id = :y"
+        const query1 = "SELECT * FROM movies WHERE movie_id= :x"
 
-
-        // const query1 = "SELECT * FROM movies WHERE movie_id= :x"
         // const query2 = "UPDATE movies SET movie_year = :y WHERE movie_id = :x";
         
 
@@ -969,8 +976,11 @@ const inputController = {
             try{
                 const c3trans1 = await node1.execute(c3t1, {x: movie_year_t1}, (err,rows)=>{});
 
-                console.log(c3trans1[0]);
-
+                if(c3trans1[0].info == '')
+                {
+                    throw `This movie does not exist.`
+                }
+                
                 await node1.commit();
                 console.log("Transaction Complete");
             }
@@ -994,8 +1004,22 @@ const inputController = {
             try{
                 const c3trans2 = await node1.execute(c3t2, {x: movie_year_t2, y: movie_id_t2}, (err,rows)=>{});
 
-                console.log(c3trans2[0]);
+                console.log(c3trans2[0].info);
 
+                if(c3trans2[0].changedRows == 0)
+                {
+                    console.log("Nothing New to add.");
+                }else {
+                    console.log(c3trans2[0].info);
+
+                    console.log("\n");
+
+                    const c3trans2_3 = await node1.execute(query1, {x: movie_id_t2}, (err,rows)=>{});
+                    console.log("[New Title]\n");
+                    
+                }
+
+                console.log(c3trans2[0]);
                 await node1.commit();
                 console.log("Transaction Complete");
             }
