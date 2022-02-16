@@ -14,9 +14,4 @@ app.post('/casefive', inputController.getCaseFiveResult);
 app.post('/casesix', inputController.getCaseSixResult);
 app.post('/caseseven', inputController.getCaseSevenResult);
 
-
-
-app.post('/resetcasetwothree', inputController.resetCaseTwoAndThree)
-
-
 module.exports = app;
