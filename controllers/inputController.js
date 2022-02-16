@@ -1904,6 +1904,7 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             console.log("             'READ COMMITTED'");
+            logger.info("Isolation Level: READ COMMITTED");
         }
 
         if(isolevel == '3')
@@ -2194,7 +2195,7 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             console.log("             'READ COMMITTED'");
-            console.log("             'READ COMMITTED'");
+            logger.info("Isolation Level: READ COMMITTED");
 
         }
 
