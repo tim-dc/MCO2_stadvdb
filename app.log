@@ -1,0 +1,12 @@
+{"level":"info","message":"2022-02-16 18:17:41 RUNNING TEST CASE"}
+{"level":"info","message":"isoLevel = 1"}
+{"level":"info","message":"Node Status: Node 1 is Active."}
+{"level":"info","message":"Node Status: Node 2 is Active."}
+{"level":"info","message":"Isolation Level: READ UNCOMMITTED"}
+{"level":"info","message":"\n-------------------- Transaction #1 --------------------"}
+{"level":"info","message":"Beginning transaction"}
+{"level":"info","message":"Rows fetched: 1"}
+{"level":"info","message":"Transaction Complete"}
+{"level":"info","message":"\n-------------------- Transaction #2 --------------------"}
+{"level":"info","message":"Request: I dont think this was the title of this movie. (Name change: Power Rangers Time Force: Temporal Anomaly"}
+{"level":"info","message":"Transaction Complete"}
