@@ -591,6 +591,7 @@ const inputController = {
 
                     const c2trans2_3 = await node1.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
                     console.log("[New Title]\n");
+                    console.log(c2trans2_3[0]);
                     logger.info("[New Title] Rows fetched: " + c2trans2_3[0].length);
 
                 }
