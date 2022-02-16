@@ -2295,9 +2295,7 @@ const inputController = {
                 return `Error selecting data`;
             }
 
-        }
-        
-        if(node1check == '1' && node3check == '1'){
+        }else if(node1check == '1' && node3check == '1'){
             node3error = 0;
 
             await node1.beginTransaction();
