@@ -331,23 +331,23 @@ const inputController = {
         {
             if(node1check == '1')
             {
-                await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
                 
             }
             
             if(node2check == '1')
             {
-                await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
             }         
 
             if(node3check == '1')
             {
-                await node3.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node3.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
             }
 
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
-                console.log("             'READ REPEATABLE'");
+                console.log("             'REPEATABLE READ'");
             }
         }
 
@@ -638,23 +638,23 @@ const inputController = {
         {
             if(node1check == '1')
             {
-                await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
                 
             }
             
             if(node2check == '1')
             {
-                await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
             }         
 
             if(node3check == '1')
             {
-                await node3.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node3.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
             }
 
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
-                console.log("             'READ REPEATABLE'");
+                console.log("             'REPEATABLE READ'");
             }
         }
 
@@ -977,23 +977,23 @@ const inputController = {
         {
             if(node1check == '1')
             {
-                await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
                 
             }
             
             if(node2check == '1')
             {
-                await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
             }         
 
             if(node3check == '1')
             {
-                await node3.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+                await node3.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
             }
 
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
-                console.log("             'READ REPEATABLE'");
+                console.log("             'REPEATABLE READ'");
             }
         }
 
@@ -1294,9 +1294,9 @@ const inputController = {
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            console.log("             'READ REPEATABLE'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            console.log("             'REPEATABLE READ'");
         }
 
         if(isolevel == '4')
@@ -1515,8 +1515,8 @@ const inputController = {
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            console.log("             'READ REPEATABLE'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            console.log("             'REPEATABLE READ'");
         }
 
         if(isolevel == '4')
@@ -1709,9 +1709,9 @@ const inputController = {
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            console.log("             'READ REPEATABLE'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            console.log("             'REPEATABLE READ'");
         }
 
         if(isolevel == '4')
@@ -1964,9 +1964,9 @@ const inputController = {
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
-            console.log("             'READ REPEATABLE'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            console.log("             'REPEATABLE READ'");
         }
 
         if(isolevel == '4')
