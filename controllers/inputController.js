@@ -715,7 +715,7 @@ const inputController = {
  
                 const c2trans2_2 = await node1.execute(c2t2_2,{x: movie_id, y: movie_name1},  (err,rows)=>{});
 
-                
+                // console.log(c2trans2_2[0].changedRows);
                 if(c2trans2_2[0].changedRows == 0)
                 {
                     console.log("\nNothing New to add.");
@@ -724,7 +724,7 @@ const inputController = {
                     console.log(c2trans2_1[0]);
 
                     
-                    console.log(data2[0].info);
+                    // console.log(data2[0].info);
 
                     console.log("\n");
 
