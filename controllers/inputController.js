@@ -2,6 +2,7 @@ const e = require('express');
 const res = require('express/lib/response');
 const mysql = require('mysql2/promise');
 const config = require('../config/config'); // nodes
+const logger = require('../config/logger');
 var versionExists = false;
 
 
@@ -80,6 +81,14 @@ const inputController = {
         const node1check = req.body.checknodeone;
         const node2check = req.body.checknodetwo;
         const node3check = req.body.checknodethree;
+
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
 
         const node1 = await mysql.createConnection(config.db1);
         const node2 = await mysql.createConnection(config.db2);
@@ -208,7 +217,18 @@ const inputController = {
         const node2check = req.body.checknodetwo;
         const node3check = req.body.checknodethree;
 
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+
+        logger.info(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds +  " RUNNING TEST CASE");
+
         console.log("isoLevel = " + isolevel);
+        logger.info("isoLevel = " + isolevel);
 
         // Connects to node 1
         const node1 = await mysql.createConnection(config.db1);
@@ -219,7 +239,7 @@ const inputController = {
         const movie_name = '10 minuta';
        
         // Transaction 2 Variables
-        const movie_year1 = 1966;
+        const movie_year1 = 1969;
         const movie_year2 = 1971;
 
         // Queries
@@ -227,7 +247,7 @@ const inputController = {
         const c2t1 = "SELECT * from movies WHERE movie_year BETWEEN :x AND :y"
         
         console.log("------ Node Status ------");
-
+        
         if(node1check == '1')
         {
             const node1Status = node1.connect(function(err) {
@@ -236,6 +256,7 @@ const inputController = {
                 if(node1Status != null)
                 {
                     console.log('    Node1 is Active.');
+                    logger.info('Node Status: Node 1 is Active.');
                 }else console.log('    Node1 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -250,6 +271,7 @@ const inputController = {
                 if(node2Status != null)
                 {
                     console.log('    Node2 is Active.');
+                    logger.info('Node Status: Node 2 is Active.');
                 }else console.log('    Node2 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -263,14 +285,16 @@ const inputController = {
             try {
                 if(node3Status != null)
                 {
-                    console.log('    Node2 is Active.');
-                }else console.log('    Node2 is OFFLINE.');
+                    console.log('    Node3 is Active.');
+                    logger.info('Node Status: Node 3 is Active.');
+                }else console.log('    Node3 is OFFLINE.');
             }catch (error) {
                 return error;
             }
         }    
        
         console.log("-------------------------");
+        logger.info("-------------------------");
 
         // makes sql read arrays as '?' https://github.com/sidorares/node-mysql2/blob/master/documentation/Extras.md
         node1.config.namedPlaceholders = true;
@@ -279,6 +303,7 @@ const inputController = {
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
         console.log("\n------------  Isolation Level ------------");
+
         if(isolevel == '1')
         {
             if(node1check == '1')
@@ -299,6 +324,7 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'READ UNCOMMITTED'");
+                logger.info("Isolation Level: READ UNCOMMITTED");
             }
             
         }
@@ -323,6 +349,7 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'READ COMMITTED'");
+                logger.info("Isolation Level: READ COMMITTED");
             }
             
         }
@@ -347,7 +374,8 @@ const inputController = {
 
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
-                console.log("             'REPEATABLE READ'");
+                console.log("             'READ REPEATABLE'");
+                logger.info("Isolation Level: READ REPEATABLE");
             }
         }
 
@@ -370,33 +398,46 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'SERIALIZABLE'");
+                logger.info("Isolation Level: SERIALIZABLE");
             }
         }
 
         console.log("\n-------------------- Transaction #1 --------------------");
+        logger.info("-------------------- Transaction #1 --------------------");
         console.log("Request: What year did this movie come out? (Movie name: 10 minuta) ");
   
         if(node1check == '1'){
             await node1.beginTransaction();
+            logger.info("Beginning transaction");
+
             try{
-                const c1trans1 = await node1.execute(c1t1, {x: movie_name}, (err,rows)=>{});
+                const c1trans1 = await node1.execute(c1t1, {x: movie_name}, (err,rows)=>{
+                    
+                });
 
                 console.log(c1trans1[0]);
+                logger.info("Rows fetched: " + c1trans1[0].length);
+
 
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
             }
             catch(err){
 
                 console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+                logger.info(`Error Occured trying to fetch Case 1: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
         } 
 
         console.log("\n-------------------- Transaction #2 --------------------");
+        logger.info("-------------------- Transaction #2 --------------------");
         console.log("Request: Give me all movies that were released between 1969-1971");
+        logger.info("Request: Give me all movies that were released between 1969-1971");
 
 
         if(node1check == '1'){
@@ -405,15 +446,18 @@ const inputController = {
                 const c1trans2 = await node1.execute(c2t1, {x: movie_year1, y: movie_year2}, (err,rows)=>{});
 
                 console.log(c1trans2[0]);
+                logger.info("Rows fetched: " + c1trans2[0].length);
 
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
             }
             catch(err){
 
                 console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
         }
@@ -510,8 +554,19 @@ const inputController = {
         const node1check = req.body.c2checknodeone;
         const node2check = req.body.c2checknodetwo;
         const node3check = req.body.c2checknodethree;
+
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+
+        logger.info(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds +  " RUNNING TEST CASE");
         
         console.log("isoLevel = " + isolevel);
+        logger.info("isoLevel = " + isolevel);
 
         // Transaction 1 & 2
         const movie_id = 262093;  // (Can be edited)
@@ -544,6 +599,7 @@ const inputController = {
                 if(node1Status != null)
                 {
                     console.log('    Node1 is Active.');
+                    logger.info('Node Status: Node 1 is Active.');
                 }else console.log('    Node1 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -558,6 +614,7 @@ const inputController = {
                 if(node2Status != null)
                 {
                     console.log('    Node2 is Active.');
+                    logger.info('Node Status: Node 2 is Active.');
                 }else console.log('    Node2 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -571,6 +628,7 @@ const inputController = {
                 if(node3Status != null)
                 {
                     console.log('    Node3 is Active.');
+                    logger.info('Node Status: Node 3 is Active.');
                 }else console.log('    Node3 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -585,7 +643,7 @@ const inputController = {
 
         
         // Set Transaction Level (MUST BE FROM DROP DOWN)
-        console.log("\n------------  Isolation Level ------------");
+        console.log("------------  Isolation Level ------------");
         if(isolevel == '1')
         {
             if(node1check == '1')
@@ -606,6 +664,7 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'READ UNCOMMITTED'");
+                logger.info("Isolation Level: READ UNCOMMITTED");                
             }
             
         }
@@ -630,6 +689,7 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'READ COMMITTED'");
+                logger.info("Isolation Level: READ COMMITTED");
             }
             
         }
@@ -654,7 +714,8 @@ const inputController = {
 
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
-                console.log("             'REPEATABLE READ'");
+                console.log("             'READ REPEATABLE'");
+                logger.info("Isolation Level: READ REPEATABLE");
             }
         }
 
@@ -677,35 +738,45 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'SERIALIZABLE'");
+                logger.info("Isolation Level: SERIALIZABLE");
             }
         }
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction #1 --------------------");
+        logger.info("-------------------- Transaction #1 --------------------");
         console.log("Request: I want to see this movie again. (Movie Id: 262093");
 
         
         if(node1check == '1'){
             await node1.beginTransaction();
+            logger.info("Beginning transaction");
+
             try{
                 const c2trans1 = await node1.execute(c2t1, {x: movie_id}, (err,rows)=>{});
 
                 console.log(c2trans1[0]);
+                logger.info("Rows fetched: " + c2trans1[0].length);
 
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
             }
             catch(err){
 
                 console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+                logger.info(`Error Occured trying to fetch Case 1: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
         }
         
         console.log("\n-------------------- Transaction #2 --------------------");
+        logger.info("-------------------- Transaction #2 --------------------");
         console.log("Request: I dont think this was the title of this movie. (Name change: Power Rangers Time Force: Temporal Anomaly");
+        logger.info("Request: I dont think this was the title of this movie. (Name change: Power Rangers Time Force: Temporal Anomaly");
 
         if(node1check == '1'){
             await node1.beginTransaction();
@@ -719,9 +790,11 @@ const inputController = {
                 if(c2trans2_2[0].changedRows == 0)
                 {
                     console.log("\nNothing New to add.");
+                    logger.info("No changed rows, nothing new to add");
                 }else {
                     console.log("[Old Title]\n");
                     console.log(c2trans2_1[0]);
+                    logger.info("[Old Title] Rows fetched: " + c2trans2_1[0].length);
 
                     
                     // console.log(data2[0].info);
@@ -730,19 +803,22 @@ const inputController = {
 
                     const c2trans2_3 = await node1.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
                     console.log("[New Title]\n");
-                    console.log(c2trans2_3[0]);
+                    logger.info("[New Title] Rows fetched: " + c2trans2_3[0].length);
+
                 }
 
                 console.log("\n");
 
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
             }
             catch(err){
 
                 console.error(`Error Occured trying to fetch Case 2: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
         }
@@ -846,8 +922,20 @@ const inputController = {
         const node1check = req.body.c3checknodeone;
         const node2check = req.body.c3checknodetwo;
         const node3check = req.body.c3checknodethree;
+
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+
+        logger.info(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds +  " RUNNING TEST CASE");
         
         console.log("isoLevel = " + isolevel);
+        logger.info("isoLevel = " + isolevel);
+
 
         // Transaction 1 Values
         const movie_id_t1 = 8855;  // (Can be edited)
@@ -881,6 +969,7 @@ const inputController = {
                 if(node1Status != null)
                 {
                     console.log('    Node1 is Active.');
+                    logger.info('Node Status: Node 1 is Active.');
                 }else console.log('    Node1 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -895,6 +984,7 @@ const inputController = {
                 if(node2Status != null)
                 {
                     console.log('    Node2 is Active.');
+                    logger.info('Node Status: Node 2 is Active.');
                 }else console.log('    Node2 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -908,6 +998,7 @@ const inputController = {
                 if(node3Status != null)
                 {
                     console.log('    Node3 is Active.');
+                    logger.info('Node Status: Node 3 is Active.');
                 }else console.log('    Node3 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -945,6 +1036,7 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'READ UNCOMMITTED'");
+                logger.info("Isolation Level: READ UNCOMMITTED");
             }
             
         }
@@ -969,6 +1061,7 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'READ COMMITTED'");
+                logger.info("Isolation Level: READ COMMITTED");
             }
             
         }
@@ -993,7 +1086,8 @@ const inputController = {
 
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
-                console.log("             'REPEATABLE READ'");
+                console.log("             'READ REPEATABLE'");
+                logger.info("Isolation Level: READ REPEATABLE");
             }
         }
 
@@ -1016,13 +1110,15 @@ const inputController = {
             if (node1check == '1' || node2check == '1' || node3check == '1')
             {
                 console.log("             'SERIALIZABLE'");
+                logger.info("Isolation Level: SERIALIZABLE");
             }
         }
         
         console.log("------------------------------------------");
-
+        logger.info("-------------------- Transaction #1 --------------------");
         console.log("\n-------------------- Transaction #1 --------------------");
         console.log("Request: I dont think this movie exists (Movie ID: 8855)");
+        logger.info("Request: I dont think this movie exists (Movie ID: 8855)");
 
 
         if(node1check == '1'){
@@ -1034,15 +1130,21 @@ const inputController = {
                 {
                     console.log( "\nThis movie id: " + movie_id_t1 +"  does not exist.\n");
                 }
+
+                logger.info("Rows fetched: " + c3trans1[0].length);
+
                 
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
             }
             catch(err){
 
                 console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
+                logger.info(`Error Occured trying to fetch Case 1: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
         }
@@ -1050,7 +1152,9 @@ const inputController = {
 
 
         console.log("\n-------------------- Transaction #2 --------------------");
+        logger.info("-------------------- Transaction #2 --------------------");
         console.log("Request: This movie has a year correction (Movie ID: 4689, 1996 => 2000)");
+        logger.info("Request: This movie has a year correction (Movie ID: 4689, 1996 => 2000)");
 
 
         if(node1check == '1'){
@@ -1060,9 +1164,12 @@ const inputController = {
                 console.log("\n");
                 console.log(c3trans2[0].info);
 
+
                 if(c3trans2[0].changedRows == 0)
                 {
                     console.log("Nothing New to add.\n");
+                    logger.info("[Changed Rows] Rows fetched: " + c3trans2[0].length);
+
                 }else {
                     console.log(c3trans2[0].info);
 
@@ -1070,18 +1177,21 @@ const inputController = {
 
                     const c3trans2_3 = await node1.execute(query1, {x: movie_id_t2}, (err,rows)=>{});
                     console.log("[New Title]\n");
+                    logger.info("[Changed Rows] Rows fetched: " + c3trans2[0].length);
                     
                 }
 
                 
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
             }
             catch(err){
 
                 console.error(`Error Occured trying to fetch Case 1: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info("Transaction Complete");
                 return `Error selecting data`;
             }
         }
@@ -1202,8 +1312,20 @@ const inputController = {
         const node1check = req.body.c4checknodeone;
         const node2check = req.body.c4checknodetwo;
         const node3check = req.body.c4checknodethree;
+
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+
+        logger.info(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds +  " RUNNING TEST CASE");
         
         console.log("isoLevel = " + isolevel);
+        logger.info("isoLevel = " + isolevel);
+
 
         // Transaction 1 Values
         const movie_id_t1 = 6;  // (Can be edited)
@@ -1233,6 +1355,7 @@ const inputController = {
                 if(node1Status != null)
                 {
                     console.log('    Node1 is Active.');
+                    logger.info('Node Status: Node 1 is Active.');
                 }else console.log('    Node1 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -1247,12 +1370,12 @@ const inputController = {
                 if(node2Status != null)
                 {
                     console.log('    Node2 is Active.');
+                    logger.info('Node Status: Node 2 is Active.');
                 }else console.log('    Node2 is OFFLINE.');
             }catch (error) {
                 return error;
             }
         }  
-
         if(node3check == '1')
         {
             const node3Status = node3.connect(function(err) {
@@ -1261,11 +1384,12 @@ const inputController = {
                 if(node3Status != null)
                 {
                     console.log('    Node3 is Active.');
+                    logger.info('Node Status: Node 3 is Active.');
                 }else console.log('    Node3 is OFFLINE.');
             }catch (error) {
                 return error;
             }
-        } 
+        }  
        
         console.log("-------------------------");
 
@@ -1283,6 +1407,8 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             console.log("             'READ UNCOMMITTED'");
+            logger.info("Isolation Level: READ UNCOMMITTED");
+
         }
 
         if(isolevel == '2')
@@ -1290,13 +1416,17 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             console.log("             'READ COMMITTED'");
+            logger.info("Isolation Level: READ COMMITTED");
+
         }
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            console.log("             'REPEATABLE READ'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+            logger.info("Isolation Level: READ REPEATABLE");
+
         }
 
         if(isolevel == '4')
@@ -1304,11 +1434,15 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             console.log("             'SERIALIZABLE'");
+            logger.info("Isolation Level: SERIALIZABLE");
+
         }
         
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        logger.info("-------------------- Transaction #1 Starts Here (Node 1)--------------------");
+
         console.log("SQL: " + query2 );
         console.log("movie_id: " + movie_id_t1 );
         console.log("movie_year: " + movie_year_t1 + "\n");
@@ -1317,6 +1451,7 @@ const inputController = {
 
         if(node1check == '1'){
             await node1.beginTransaction();
+            logger.info("Beginning transaction");
 
             try{
                 // SQL Statement 1
@@ -1330,14 +1465,17 @@ const inputController = {
                     const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
                     });
 
+
                     if(data2[0] != data3[0]) {
                         await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
+                        logger.info("Node 1 not equal to Node 2, replicating data.");
                     }
                 }
 
                 if(node2check != '1')
                 {
+                    logger.info("Node 2 is offline, Transaction cannot be committed.");
                     throw `Node 2 is offline, Transaction cannot be committed.`;
                 }
               
@@ -1348,11 +1486,15 @@ const inputController = {
                 // Commit to confirm Transaction
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
+
             }catch (err) {
                 // Roll back Portion
                 console.error(`Error Occured : ${err.message}`, err);
+                logger.info(`Error Occured: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
 
@@ -1374,11 +1516,15 @@ const inputController = {
                     if(data2[0] != data3[0]) {
                         await node1.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
+
+                        logger.info("Node 1 not equal to Node 2, replicating data.");
+
                     }
                 }
 
                 if(node1check != '1')
                 {
+                    logger.info("Node 2 is offline, Transaction cannot be committed.");
                     throw `Node 1 is offline, Transaction cannot be committed.`;
                 }
               
@@ -1389,11 +1535,15 @@ const inputController = {
                 // Commit to confirm Transaction
                 await node2.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
+
             }catch (err) {
                 // Roll back Portion
                 console.error(`Error Occured : ${err.message}`, err);
+                logger.info(`Error Occured: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
         }
@@ -1414,8 +1564,19 @@ const inputController = {
         const node1check = req.body.c5checknodeone;
         const node2check = req.body.c5checknodetwo;
         const node3check = req.body.c5checknodethree;
+
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+
+        logger.info(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds +  " RUNNING TEST CASE");
         
         console.log("isoLevel = " + isolevel);
+        logger.info("isoLevel = " + isolevel);
 
         // Transaction 1 Values
         const movie_id_t1 = 6;  // (Can be edited)
@@ -1445,6 +1606,7 @@ const inputController = {
                 if(node1Status != null)
                 {
                     console.log('    Node1 is Active.');
+                    logger.info('Node Status: Node 1 is Active.');
                 }else console.log('    Node1 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -1459,12 +1621,12 @@ const inputController = {
                 if(node2Status != null)
                 {
                     console.log('    Node2 is Active.');
+                    logger.info('Node Status: Node 2 is Active.');
                 }else console.log('    Node2 is OFFLINE.');
             }catch (error) {
                 return error;
             }
         }  
-
         if(node3check == '1')
         {
             const node3Status = node3.connect(function(err) {
@@ -1473,12 +1635,12 @@ const inputController = {
                 if(node3Status != null)
                 {
                     console.log('    Node3 is Active.');
+                    logger.info('Node Status: Node 3 is Active.');
                 }else console.log('    Node3 is OFFLINE.');
             }catch (error) {
                 return error;
             }
-        } 
-
+        }  
         // const node3Status = node3.connect(function(err) {
         // });
         // try {
@@ -1505,29 +1667,39 @@ const inputController = {
         {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             console.log("             'READ UNCOMMITTED'");
+            logger.info("Isolation Level: READ UNCOMMITTED");
+
         }
 
         if(isolevel == '2')
         {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             console.log("             'READ COMMITTED'");
+            logger.info("Isolation Level: READ COMMITTED");
+
         }
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            console.log("             'REPEATABLE READ'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+            logger.info("Isolation Level: READ REPEATABLE");
+
         }
 
         if(isolevel == '4')
         {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             console.log("             'SERIALIZABLE'");
+            logger.info("Isolation Level: SERIALIZABLE");
+
         }
         
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        logger.info("-------------------- Transaction #1 Starts Here (Node 1)--------------------");
+
         console.log("SQL: " + query2 );
         console.log("movie_id: " + movie_id_t1 );
         console.log("movie_year: " + movie_year_t1 + "\n");
@@ -1553,6 +1725,9 @@ const inputController = {
                     if(data2[0] != data3[0]) {
                         await node2.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
+
+                        logger.info("Node 2 not equal to Node 1, replicating data.");
+
                     }
 
                     
@@ -1571,12 +1746,16 @@ const inputController = {
                     if(data2[0] != data3[0]) {
                         await node3.execute(query2, {x: movie_id_t1, y: movie_year_t1}, (err,rows) => {
                         });
+
+                        logger.info("Node 3 not equal to Node 1, replicating data.");
+
                     }
 
                 }
 
                 if(node3check != '1')
                 {
+                    logger.info("Node 2 is offline, Transaction cannot be committed.");
                     throw `Node 3 is offline, Transaction cannot be committed.`;
                 }
               
@@ -1587,11 +1766,15 @@ const inputController = {
                 // Commit to confirm Transaction
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
+
             }catch (err) {
                 // Roll back Portion
                 console.error(`Error Occured : ${err.message}`, err);
+                logger.info(`Error Occured: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
                 return `Error selecting data`;
             }
 
@@ -1600,7 +1783,8 @@ const inputController = {
 
         console.log("");
         //console.log(req.body.select);
-        
+        logger.info('Node connections terminated.');
+
 
         console.log("--------------------------------------------------------------------------\n");
 
@@ -1615,10 +1799,21 @@ const inputController = {
         const node1check = req.body.c6checknodeone;
         const node2check = req.body.c6checknodetwo;
         const node3check = req.body.c6checknodethree;
+
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+
+        logger.info(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds +  " RUNNING TEST CASE");
         
         var node1error = node1check;
         
         console.log("isoLevel = " + isolevel);
+        logger.info("isoLevel = " + isolevel);
 
         // Transaction 1 Values
         const movie_id_t1 = 6;  // (Can be edited)
@@ -1648,6 +1843,7 @@ const inputController = {
                 if(node1Status != null)
                 {
                     console.log('    Node1 is Active.');
+                    logger.info('Node Status: Node 1 is Active.');
                 }else console.log('    Node1 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -1662,12 +1858,12 @@ const inputController = {
                 if(node2Status != null)
                 {
                     console.log('    Node2 is Active.');
+                    logger.info('Node Status: Node 2 is Active.');
                 }else console.log('    Node2 is OFFLINE.');
             }catch (error) {
                 return error;
             }
         }  
-
         if(node3check == '1')
         {
             const node3Status = node3.connect(function(err) {
@@ -1676,11 +1872,12 @@ const inputController = {
                 if(node3Status != null)
                 {
                     console.log('    Node3 is Active.');
+                    logger.info('Node Status: Node 3 is Active.');
                 }else console.log('    Node3 is OFFLINE.');
             }catch (error) {
                 return error;
             }
-        } 
+        }  
        
         console.log("-------------------------");
 
@@ -1698,6 +1895,8 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             console.log("             'READ UNCOMMITTED'");
+            logger.info("Isolation Level: READ UNCOMMITTED");
+
         }
 
         if(isolevel == '2')
@@ -1709,9 +1908,11 @@ const inputController = {
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            console.log("             'REPEATABLE READ'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+            logger.info("Isolation Level: READ REPEATABLE");
+
         }
 
         if(isolevel == '4')
@@ -1719,11 +1920,14 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             console.log("             'SERIALIZABLE'");
+            logger.info("Isolation Level: SERIALIZABLE");
+
         }
         
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        logger.info("-------------------- Transaction #1 Starts Here (Node 1)--------------------");
         console.log("SQL: " + query2 );
         console.log("movie_id: " + movie_id_t1 );
         console.log("movie_year: " + movie_year_t1 + "\n");
@@ -1734,6 +1938,7 @@ const inputController = {
             node1error = 0;
 
             await node2.beginTransaction();
+            logger.info("Beginning transaction");
 
             try{
                 // SQL Statement 1
@@ -1753,6 +1958,7 @@ const inputController = {
                     }
                 }else {
                     console.log("Transaction in progress...");
+                    logger.info("Transaction in progress...");
 
                     await sleep(5000);
 
@@ -1760,8 +1966,10 @@ const inputController = {
 
                     if(node1error != '1')
                     {
+                        logger.info("Connection failed!");
                         throw `Transaction Timeout. Changes cannot be committed.`
                     }else {
+                        logger.info("Connection restored!");
                         const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                         });
     
@@ -1773,18 +1981,22 @@ const inputController = {
                 }
                          
                 console.log(data[0].info);
-            
                 // Commit to confirm Transaction
                 await node2.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
+                logger.info('Node connections terminated.');
                 node1.end();
                 node2.end();
                 node3.end(); 
             }catch (err) {
                 // Roll back Portion
                 console.error(`Error Occured : ${err.message}`, err);
+                logger.info(`Error Occured: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
+                logger.info('Node connections terminated.');
                 node1.end();
                 node2.end();
                 node3.end(); 
@@ -1795,6 +2007,7 @@ const inputController = {
             node1error = 0;
 
             await node3.beginTransaction();
+            logger.info("Beginning transaction");
 
             try{
                 // SQL Statement 1
@@ -1814,6 +2027,7 @@ const inputController = {
                     }
                 }else {
                     console.log("Transaction in progress...");
+                    logger.info("Transaction in progress...");
 
                     await sleep(5000);
 
@@ -1821,8 +2035,10 @@ const inputController = {
 
                     if(node1error != '1')
                     {
+                        logger.info("Connection failed!");
                         throw `Transaction Timeout. Changes cannot be committed.`
                     }else {
+                        logger.info("Connection restored!");
                         const data3 = await node1.execute(query1, {x:movie_id_t1}, (err,rows) => {
                         });
     
@@ -1838,6 +2054,8 @@ const inputController = {
                 // Commit to confirm Transaction
                 await node2.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
+                logger.info('Node connections terminated.');
                 node1.end();
                 node2.end();
                 node3.end(); 
@@ -1846,6 +2064,8 @@ const inputController = {
                 console.error(`Error Occured : ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
+                logger.info('Node connections terminated.');
                 node1.end();
                 node2.end();
                 node3.end(); 
@@ -1872,8 +2092,19 @@ const inputController = {
         
         var node2error = node2check;
         var node3error = node3check;
+
+        let date_ob = new Date();
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = date_ob.getHours();
+        let minutes = date_ob.getMinutes();
+        let seconds = date_ob.getSeconds();
+
+        logger.info(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds +  " RUNNING TEST CASE");
         
         console.log("isoLevel = " + isolevel);
+        logger.info("isoLevel = " + isolevel);
 
         // Transaction 1 Values
         const movie_id_t1 = 6;  // (Can be edited)
@@ -1903,6 +2134,7 @@ const inputController = {
                 if(node1Status != null)
                 {
                     console.log('    Node1 is Active.');
+                    logger.info('Node Status: Node 1 is Active.');
                 }else console.log('    Node1 is OFFLINE.');
             }catch (error) {
                 return error;
@@ -1917,12 +2149,12 @@ const inputController = {
                 if(node2Status != null)
                 {
                     console.log('    Node2 is Active.');
+                    logger.info('Node Status: Node 2 is Active.');
                 }else console.log('    Node2 is OFFLINE.');
             }catch (error) {
                 return error;
             }
         }  
-
         if(node3check == '1')
         {
             const node3Status = node3.connect(function(err) {
@@ -1931,11 +2163,12 @@ const inputController = {
                 if(node3Status != null)
                 {
                     console.log('    Node3 is Active.');
+                    logger.info('Node Status: Node 3 is Active.');
                 }else console.log('    Node3 is OFFLINE.');
             }catch (error) {
                 return error;
             }
-        } 
+        }  
        
         console.log("-------------------------");
 
@@ -1953,6 +2186,7 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
             console.log("             'READ UNCOMMITTED'");
+            logger.info("Isolation Level: READ UNCOMMITTED");
         }
 
         if(isolevel == '2')
@@ -1960,13 +2194,17 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
             console.log("             'READ COMMITTED'");
+            console.log("             'READ COMMITTED'");
+
         }
 
         if(isolevel == '3')
         {
-            await node1.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            await node2.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            console.log("             'REPEATABLE READ'");
+            await node1.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            await node2.execute("SET TRANSACTION ISOLATION LEVEL READ REPEATABLE");
+            console.log("             'READ REPEATABLE'");
+            logger.info("Isolation Level: READ REPEATABLE");
+
         }
 
         if(isolevel == '4')
@@ -1974,11 +2212,13 @@ const inputController = {
             await node1.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             await node2.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
             console.log("             'SERIALIZABLE'");
+            logger.info("Isolation Level: SERIALIZABLE");
         }
         
         console.log("------------------------------------------");
 
         console.log("\n-------------------- Transaction 1 Starts Here (Node 1) ------------------");
+        logger.info("-------------------- Transaction #1 Starts Here (Node 1)--------------------");
         console.log("SQL: " + query2 );
         console.log("movie_id: " + movie_id_t1 );
         console.log("movie_year: " + movie_year_t1 + "\n");
@@ -1989,6 +2229,7 @@ const inputController = {
             node2error = 0;
 
             await node1.beginTransaction();
+            logger.info("Beginning transaction");
 
             try{
                 // SQL Statement 1
@@ -2008,6 +2249,7 @@ const inputController = {
                     }
                 }else {
                     console.log("Transaction in progress...");
+                    logger.info("Transaction in progress...");
                     // console.log(node2error)
                     await sleep(5000);
 
@@ -2015,8 +2257,10 @@ const inputController = {
                     // console.log(node2error)
                     if(node2error != '1')
                     {
+                        logger.info("Connection failed!");
                         throw `Transaction Timeout. Changes cannot be committed.`
                     }else {
+                        logger.info("Connection restored!");
                         const data3 = await node2.execute(query1, {x:movie_id_t1}, (err,rows) => {
                         });
     
@@ -2032,14 +2276,18 @@ const inputController = {
                 // Commit to confirm Transaction
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
                 node1.end();
                 node2.end();
                 node3.end(); 
             }catch (err) {
                 // Roll back Portion
                 console.error(`Error Occured : ${err.message}`, err);
+                logger.info(`Error Occured: ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
+                logger.info('Node connections terminated.');
                 node1.end();
                 node2.end();
                 node3.end(); 
@@ -2050,6 +2298,7 @@ const inputController = {
             node3error = 0;
 
             await node1.beginTransaction();
+            logger.info("Beginning transaction");
 
             try{
                 // SQL Statement 1
@@ -2069,6 +2318,7 @@ const inputController = {
                     }
                 }else {
                     console.log("Transaction in progress...");
+                    logger.info("Transaction in progress...");
                     // console.log(node3error);
                     await sleep(5000);
 
@@ -2076,8 +2326,10 @@ const inputController = {
                     // console.log(node3error);
                     if(node3error != '1')
                     {
+                        logger.info("Connection failed!");
                         throw `Transaction Timeout. Changes cannot be committed.`
                     }else {
+                        logger.info("Connection restored!");
                         const data3 = await node3.execute(query1, {x:movie_id_t1}, (err,rows) => {
                         });
     
@@ -2093,6 +2345,8 @@ const inputController = {
                 // Commit to confirm Transaction
                 await node1.commit();
                 console.log("Transaction Complete");
+                logger.info("Transaction Complete");
+                logger.info('Node connections terminated.');
                 node1.end();
                 node2.end();
                 node3.end(); 
@@ -2101,6 +2355,8 @@ const inputController = {
                 console.error(`Error Occured : ${err.message}`, err);
                 node1.rollback();
                 console.info('Rollback successful');
+                logger.info('Rollback successful');
+                logger.info('Node connections terminated.');
                 node1.end();
                 node2.end();
                 node3.end(); 
