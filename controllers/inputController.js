@@ -275,10 +275,17 @@ const inputController = {
 
             try{
                 const c1trans1 = await node1.execute(c1t1, {x: movie_name}, (err,rows)=>{
-                    
+                });
+
+                const c2trans2 = await node2.execute(c1t1, {x: movie_name}, (err,rows)=>{
+                });
+
+                const c3trans3 = await node3.execute(c1t1, {x: movie_name}, (err,rows)=>{
                 });
 
                 console.log(c1trans1[0]);
+                console.log(c2trans2[0]);
+                console.log(c3trans3[0]);
                 logger.info("Rows fetched: " + c1trans1[0].length);
 
 
@@ -308,7 +315,12 @@ const inputController = {
             try{
                 const c1trans2 = await node1.execute(c2t1, {x: movie_year1, y: movie_year2}, (err,rows)=>{});
 
+                const c2trans2 = await node2.execute(c2t1, {x: movie_year1, y: movie_year2}, (err,rows)=>{});
+
+                const c3trans2 = await node3.execute(c2t1, {x: movie_year1, y: movie_year2}, (err,rows)=>{});
+
                 console.log(c1trans2[0]);
+                
                 logger.info("Rows fetched: " + c1trans2[0].length);
 
                 await node1.commit();
@@ -541,8 +553,12 @@ const inputController = {
             logger.info("Beginning transaction");
 
             try{
+                
                 const c2trans1 = await node1.execute(c2t1, {x: movie_id}, (err,rows)=>{});
 
+                const c2trans2 = await node2.execute(c2t1, {x: movie_id}, (err,rows)=>{});
+
+                const c2trans3 = await node3.execute(c2t1, {x: movie_id}, (err,rows)=>{});
                 console.log(c2trans1[0]);
                 logger.info("Rows fetched: " + c2trans1[0].length);
 
@@ -572,24 +588,26 @@ const inputController = {
 
                 const c2trans2_1 = await node1.execute(c2t2_1, {x: movie_id}, (err,rows)=>{});
  
-                const c2trans2_2 = await node1.execute(c2t2_2,{x: movie_id, y: movie_name1},  (err,rows)=>{});
+                const c2trans2_2 = await node1.execute(c2t2_2,{x: movie_id, y: movie_name1}, (err,rows)=>{});
 
                 // console.log(c2trans2_2[0].changedRows);
                 if(c2trans2_2[0].changedRows == 0)
                 {
                     console.log("\nNothing New to add.");
+                    
                     logger.info("No changed rows, nothing new to add");
                 }else {
                     console.log("[Old Title]\n");
                     console.log(c2trans2_1[0]);
                     logger.info("[Old Title] Rows fetched: " + c2trans2_1[0].length);
 
-                    
                     // console.log(data2[0].info);
 
                     console.log("\n");
 
                     const c2trans2_3 = await node1.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
+
+                    const c3trans2_3 = await node3.execute(c2t2_3, {x: movie_id}, (err,rows)=>{});
                     console.log("[New Title]\n");
                     console.log(c2trans2_3[0]);
                     logger.info("[New Title] Rows fetched: " + c2trans2_3[0].length);
@@ -834,6 +852,8 @@ const inputController = {
             await node1.beginTransaction();
             try{
                 const c3trans1 = await node1.execute(c3t1, {x: movie_id_t1}, (err,rows)=>{});
+                const c3trans2 = await node2.execute(c3t1, {x: movie_id_t1}, (err,rows)=>{});
+                const c3trans3 = await node3.execute(c3t1, {x: movie_id_t1}, (err,rows)=>{});
 
                 if(c3trans1[0].info == '')
                 {
@@ -873,7 +893,6 @@ const inputController = {
                 console.log("\n");
                 console.log(c3trans2[0].info);
 
-
                 if(c3trans2[0].changedRows == 0)
                 {
                     console.log("Nothing New to add.\n");
@@ -885,6 +904,10 @@ const inputController = {
                     console.log("\n");
 
                     const c3trans2_3 = await node1.execute(query1, {x: movie_id_t2}, (err,rows)=>{});
+                    const c3trans2_4 = await node2.execute(query1, {x: movie_id_t2}, (err,rows)=>{});
+                    const c3trans2_5 = await node3.execute(query1, {x: movie_id_t2}, (err,rows)=>{});
+
+
                     console.log("[New Title]\n");
                     console.log(c3trans2_3[0]);
                     logger.info("[Changed Rows] Rows fetched: " + c3trans2[0].length);
