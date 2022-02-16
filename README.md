@@ -8,6 +8,7 @@ HOW TO RUN
 1. Make sure that Node.js is installed
 2. Open cmd directory where index.js is located.
 3. Can be run with either nodemon or supervisor.
+4. Run with 'nodemon' or 'node index.js'
 
 HOW TO RESET
 1. There are SQL dump files located in /node-scripts
