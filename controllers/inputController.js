@@ -886,6 +886,7 @@ const inputController = {
 
                     const c3trans2_3 = await node1.execute(query1, {x: movie_id_t2}, (err,rows)=>{});
                     console.log("[New Title]\n");
+                    console.log(c3trans2_3[0]);
                     logger.info("[Changed Rows] Rows fetched: " + c3trans2[0].length);
                     
                 }
